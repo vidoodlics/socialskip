@@ -1,7 +1,7 @@
 SocialSkip
 ==========
 
-http://socialskip.appspot.com/
+http://www.socialskip.org/
 
 ### Introduction
 
