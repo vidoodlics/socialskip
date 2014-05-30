@@ -14,7 +14,7 @@ public class CheckCaptcha {
 	/* This method checks if captcha is valid */
 	public static boolean isValidCaptcha(String remoteAddr, String challenge, String uresponse) {
 		
-        String privateKey = "************************8";
+        String privateKey = "************************";
 		
         ReCaptchaImpl reCaptcha = new ReCaptchaImpl();
         reCaptcha.setPrivateKey(privateKey);
