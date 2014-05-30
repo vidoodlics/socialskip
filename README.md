@@ -155,6 +155,29 @@ Visit https://code.google.com/apis/console. Click on *Create project* and the pa
 public static final String APIkey = "********************"; // API key
 ```
 
+
+### Setting up reCAPTCHA
+
+Visit [https://www.google.com/recaptcha](https://www.google.com/recaptcha). Click on *Get reCaptcha*, then *Sign up Now*. Type your domain in *Domain* and click *Create*. Go to *My account* and open your site.
+
+Copy the *Private key* and paste in file src/socialskip/CheckCaptcha.java
+```
+String privateKey = "************************";
+```
+Copy the *Public Key* and paste in file war/home.jsp
+```
+........
+<script type="text/javascript"
+  src="http://www.google.com/recaptcha/api/challenge?k=***************************">
+</script>
+<noscript>
+<iframe src="http://www.google.com/recaptcha/api/noscript?***************************"
+  .......
+</noscript>
+.......
+```
+
+
 ### Creating App Engine Application
 
 Visit https://appengine.google.com, sign in with your google account and create an application. If this is your first time building applications on App Engine, will ask you to verify your account. When complete account verification, click *Create Application* and fill with name the *Application Identifier* field and optionally the *Application Title* field and click on *Create Application*.
