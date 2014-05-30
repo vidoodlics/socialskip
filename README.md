@@ -31,7 +31,7 @@ This web app integrate the following technologies and tools:
 ### Requirements
 
 * Java JDK 1.7 - [Download](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html) and [Install](http://docs.oracle.com/javase/7/docs/webnotes/install/index.html)
-* Eclipse IDE - [Download](http://www.eclipse.org/downloads/)
+* Eclipse IDE for Java EE Developers - [Download](http://www.eclipse.org/downloads/)
 * Google Plugin for Eclipse - [Install](https://developers.google.com/eclipse/docs/download)
 * EGit - [Install](http://www.eclipse.org/egit/download/)
 * Google account - Don't have? [Create](https://accounts.google.com/)
