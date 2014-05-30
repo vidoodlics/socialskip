@@ -71,6 +71,7 @@ To do this, click on *Add Library* button, select *JRE System Library* and in th
 To create fusion tables, visit [tables.googlelabs.com](tables.googlelabs.com) and sign in using your Google account.
 Click on *Create a Fusion Table* and the new window click on *Create empty table*. The creation is very simple. You can add or modify columns clicking *Edit* -> *Add column* or *Edit* -> *Change columns*, respectively. 
 
+You must be create the following tables.
 
 **Researchers**
 
