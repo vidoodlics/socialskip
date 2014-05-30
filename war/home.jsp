@@ -237,10 +237,10 @@
 
 				
 				<script type="text/javascript"
-				src="http://www.google.com/recaptcha/api/challenge?k=6Lf_qfMSAAAAAMl0ZnflXcqU3uz0_jB9U87F_Ygo">
+				src="http://www.google.com/recaptcha/api/challenge?k=***************************">
 				</script>
 				<noscript>
-				<iframe src="http://www.google.com/recaptcha/api/noscript?k=6Lf_qfMSAAAAAMl0ZnflXcqU3uz0_jB9U87F_Ygo"
+				<iframe src="http://www.google.com/recaptcha/api/noscript?***************************"
 				height="200" width="300" frameborder="0"></iframe><br>
 				<textarea name="recaptcha_challenge_field" rows="3" cols="40">
 				</textarea>
