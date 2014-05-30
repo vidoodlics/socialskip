@@ -171,7 +171,7 @@ Copy the *Public Key* and paste in file war/home.jsp
   src="http://www.google.com/recaptcha/api/challenge?k=***************************">
 </script>
 <noscript>
-<iframe src="http://www.google.com/recaptcha/api/noscript?***************************"
+  <iframe src="http://www.google.com/recaptcha/api/noscript?***************************"
   .......
 </noscript>
 .......
