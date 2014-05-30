@@ -187,7 +187,7 @@ Copy the *Public Key* and paste in file war/home.jsp
 
 ### Creating App Engine Application
 
-Visit https://appengine.google.com, sign in with your google account and create an application. If this is your first time building applications on App Engine, will ask you to verify your account. When complete account verification, click *Create Application* and fill with name the *Application Identifier* field and optionally the *Application Title* field and click on *Create Application*.
+Visit https://appengine.google.com, sign in with your google account and create an application. If this is your first time creating applications on App Engine, will ask you to verify your account. When complete account verification, click *Create Application* and fill with name the *Application Identifier* field and optionally the *Application Title* field and click on *Create Application*.
 
 Enter your Application Identifier in the following files.
 
