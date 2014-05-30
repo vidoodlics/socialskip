@@ -211,4 +211,4 @@ var purl = "http://Application_Identifier.appspot.com/interactions";
 
 From the toolbar in Eclipse IDE click on *Google icon* -> *Deploy to App Engine* -> *Deploy*.
 
-<img src="http://i58.tinypic.com/vqqpgj.jpg" alt="Deploy" style="max-width: 300px">
+![Deploy](http://i58.tinypic.com/vqqpgj.jpg)
