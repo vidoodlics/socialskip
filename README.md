@@ -143,10 +143,17 @@ public static final String INTERACTIONS = "**********"; // Interactions table ID
 public static final String DOWNLOAD = "**********";  // Merge of Interactions and Transactions
 ```
 
+And a few lines below in this file, enter your gmail and your password.
+```
+private static final String email = "**************@gmail.com"; // Enter your gmail
+private static final String password = "**********"; // Enter password from your gmail
+```
+
 The ID of *View* table insert in first line of the *war/code/charts.js* file.
 ```
 var chartdata = '************' // Id of Fusion Table containing the data for the chart
 ```
+
 
 ### Create an Google API key
 
