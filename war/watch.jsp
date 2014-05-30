@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="/images/favicon.ico" rel="shortcut icon" type="image/x-icon" />
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="/code/socialskip.min.js" type="text/javascript"></script>
+<script src="/code/socialskip.js" type="text/javascript"></script>
 <style>
 body {
 	background-color: #ecf0f1;
