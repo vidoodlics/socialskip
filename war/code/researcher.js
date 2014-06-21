@@ -1,7 +1,5 @@
 var slide = 0x01; // Buttons - Slider bit mask
 var play = 0x02; // Play button bit mask
-var forward = 0x04; // Forward button bit mask
-var backward = 0x08; // Backward button bit mask
 var jump = 0x3F << 4; // Jump duration bit mask (6 bits 0-63 seconds)
 var interaction = 0xFF << 10; // Total interaction time bit mask (8 bits 0-255 minutes)
 var volume = 0x40000; // Volume bit mask
@@ -56,15 +54,6 @@ var newrow = '<div data-role="collapsible-set" data-theme="b" data-mini="true" i
  */
 function toControls(fld) {
 	var control ="";
-	if (fld & slide == 1) {
-		control = $("form input[name='controltype']")[0];
-		$("#buttonsdiv").hide();
-		$("#jumpdiv").hide();
-	} else {
-		control = $("form input[name='controltype']")[1];
-		$("#buttonsdiv").show();
-		$("#jumpdiv").show();
-	}
 	$("#sliderradio").prop("checked",false).checkboxradio("refresh");
 	$("#buttonsradio").prop("checked",false).checkboxradio("refresh");
 	$(control).prop("checked",true).checkboxradio("refresh");
@@ -94,14 +83,8 @@ function getJump(fld) {
  */
 function fromControls() {
 	var fld = 0;
-	if ($("form input[name='controltype']:checked").val() == "slide")
-		fld |= slide;
 	if ($('#play option:selected').val() == 'on')
 		fld |= play;
-	if ($('#forward option:selected').val() == 'on')
-		fld |= forward;
-	if ($('#backward option:selected').val() == 'on')
-		fld |= backward;
 	if ($('#volume option:selected').val() == 'on')
 		fld |= volume;
 	if ($('#fullscreen option:selected').val() == 'on')
@@ -169,7 +152,6 @@ function edit() {
 		$("#bcolor").val("#454545");
 		$("#bcolor").css("background-color", "#454545");
 	}
-	$("#more").hide();
 	$("#action").val("1"); // Action code for an update
 	setVideoRange($("#videourl").val());
 	$.mobile.changePage($("#videoinfo")); // Open form as a dialog
@@ -463,17 +445,7 @@ $(document).delegate("#researchersPage", "pageinit", function () {
 			$("#videoinfo").dialog('close');
 		}, "text");
 	});
-	
-	$( "#sliderradio" ).click(function() {
-		$("#buttonsdiv").hide();
-		$("#jumpdiv").hide();
-	});
-	$( "#buttonsradio" ).click(function() {
-		$("#buttonsdiv").show();
-		$("#jumpdiv").show();
-	    $("#forward").val('on').change().slider('refresh');
-	    $("#backward").val('on').change().slider('refresh');
-	});
+
 	
 	$("#videotimerange").hide();
 	

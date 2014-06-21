@@ -11,8 +11,8 @@ var purl = "http://MY_APP_ID.appspot.com/interactions";
 //var purl = "http://127.0.0.1:8888/fusion";
 var slide = 0x01; // Buttons - Slider bit mask
 var play = 0x02; // Play button bit mask
-var forward = 0x04; // Forward button bit mask
-var backward = 0x08; // Backward button bit mask
+//var forward = 0x04; // Forward button bit mask
+//var backward = 0x08; // Backward button bit mask
 var volume = 0x40000; // Volume bit mask
 var fullscreen = 0x80000; // Fullscreen button bit mask
 var quality = 0x100000  // Quality button bit mask
@@ -133,9 +133,9 @@ function onPlayerReady(event)
 	// draw pause button
 	drawPauseButton(analysisid);
 	// draw forward button
-	drawForwardButton(analysisid)
+	//drawForwardButton(analysisid)
 	// draw backward button
-	drawBackwardButton(analysisid)
+	//drawBackwardButton(analysisid)
 	// draw circle seekpos
 	drawCircleSeekpos(analysisid)
 	// draw fullscreen button
@@ -169,7 +169,7 @@ function onPlayerReady(event)
 		playpause(analysisid);
 	});	
 	
-	
+	/*
 	// backward button click
 	$( "#socialskip" + analysisid + "_backward" ).click(function() { 
 		var p = players[analysisid];
@@ -220,7 +220,7 @@ function onPlayerReady(event)
 			}
 		}
 	});	
-	
+	*/
 	
 	// set volume to 100
 	volumeOn(100, analysisid)
@@ -681,7 +681,7 @@ function drawPauseButton(analysisid) {
 		ctx.fillRect(15,4,4,12);
 	}
 }
-
+/*
 //This functions drawing forward button with canvas
 function drawForwardButton(analysisid) {
 	var c=document.getElementById('socialskip' + analysisid + '_forward');
@@ -727,7 +727,7 @@ function drawBackwardButton(analysisid) {
 		context.fill();
 	}
 }
-
+*/
 //This functions drawing options button with canvas
 function drawOptionsButton(analysisid) {
 	var c=document.getElementById("socialskip" + analysisid + "_playbackOptions");
@@ -1064,8 +1064,8 @@ function createMarkup($elem, analysisid, videoinfo) {
 	var html;
 	 
 	var playButtonHtml = '<canvas style="cursor:pointer;" id="socialskip' + analysisid + '_play" width="30" height="18">Play</canvas>';
-	var forwardButtonHtml = '<canvas style="cursor:pointer;" id="socialskip' + analysisid + '_forward" width="30" height="18">Forward</canvas>';
-	var backwardButtonHtml = '<canvas style="cursor:pointer;" id="socialskip' + analysisid + '_backward" width="30" height="18">Backward</canvas>';
+	//var forwardButtonHtml = '<canvas style="cursor:pointer;" id="socialskip' + analysisid + '_forward" width="30" height="18">Forward</canvas>';
+	//var backwardButtonHtml = '<canvas style="cursor:pointer;" id="socialskip' + analysisid + '_backward" width="30" height="18">Backward</canvas>';
 	var volumeButtonHtml = '<canvas style="cursor:pointer;" id="socialskip' + analysisid + '_volume" width="30" height="18">Volume</canvas>';
 	var counterHtml = '<td style="display:inline-block;overflow: hidden; white-space: nowrap;font-family:Arial, Sans-serif;font-size:11px" id="socialskip' + analysisid + '_counter"></td>';
 	var playbackOptionsButtonHtml = '<canvas style="cursor:pointer;" id="socialskip' + analysisid + '_playbackOptions" width="30" height="19">Options</canvas>';
@@ -1081,22 +1081,22 @@ function createMarkup($elem, analysisid, videoinfo) {
 		// toolbar table
 		html.push('<table style="width:100%">');
 		
-		if (controls & slide) {
-			// seekbar
-			html.push('<tr style="padding: 0px;"><td colspan="100%">');
-			html.push('<div id="socialskip' + analysisid + '_timebox"></div>');
-			html.push('<div class="socialskip' + analysisid + '_seekbar" id="socialskip' + analysisid + '_seekbar"><canvas id="socialskip' + analysisid + '_circle_seekpos" width="16" height="16"></canvas><div id="socialskip' + analysisid + '_seekpos"></div></div>');
-			html.push('</td></tr>');
-			
-			html.push('<tr>');
-			
-			// play button
-			if (controls & play) {
-				html.push('<td style="width:25px;overflow: hidden;white-space: nowrap;">');
-				html.push(playButtonHtml);
-				html.push('</td>');
-			} 
-		} else {
+		//if (controls & slide) {
+		// seekbar
+		html.push('<tr style="padding: 0px;"><td colspan="100%">');
+		html.push('<div id="socialskip' + analysisid + '_timebox"></div>');
+		html.push('<div class="socialskip' + analysisid + '_seekbar" id="socialskip' + analysisid + '_seekbar"><canvas id="socialskip' + analysisid + '_circle_seekpos" width="16" height="16"></canvas><div id="socialskip' + analysisid + '_seekpos"></div></div>');
+		html.push('</td></tr>');
+		
+		html.push('<tr>');
+		
+		// play button
+		if (controls & play) {
+			html.push('<td style="width:25px;overflow: hidden;white-space: nowrap;">');
+			html.push(playButtonHtml);
+			html.push('</td>');
+		} 
+		/* } else {
 			// push empty tr
 			html.push('<tr><td style="min-height:6px;"></td></tr>');
 			
@@ -1123,6 +1123,7 @@ function createMarkup($elem, analysisid, videoinfo) {
 				html.push('</td>');
 			} 
 		}
+		*/
 		
 		// volume button
 		if(controls & volume ) {

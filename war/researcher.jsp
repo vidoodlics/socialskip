@@ -63,7 +63,7 @@
 	<script src="/code/responsive.js" type="text/javascript"></script> 
 	<script src="/css/dropdownmenu/ddm.js" type="text/javascript"></script> 
 	<script src="/code/jscolor/jscolor.js" type="text/javascript"></script>
-	
+	<script src="/code/googleanalytics.js" type="text/javascript"></script> 
 </head>
 
 <body >
@@ -161,7 +161,7 @@
 			Copy the following lines just before in the <code>&lt;/head&gt;</code> tag.
 <textarea>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="http://<%=WelcomeServlet.getAppId()%>.appspot.com/code/socialskip.min.js" type="text/javascript"></script>
+<script src="http://<%=WelcomeServlet.getAppId()%>.appspot.com/code/socialskip.js" type="text/javascript"></script>
 </textarea>
 			Also copy the following line in the body.
 			<textarea id="codearea"></textarea>
@@ -191,33 +191,15 @@
 	  	    </div>
 
 	  	    <div id="videotimerange">
-	  	    <div class="ui-field-contain" id="videotimerange">
-	  	    	<div data-role="rangeslider" data-mini="true">
-					<label for="starttime">Start &amp; End Time (sec):</label>
-					<input name="starttime" id="starttime" min="0" value="0" type="range" data-highlight="true" data-theme="b" />
-					<label for="endtime">Video Start &amp; End Time:</label>
-					<input name="endtime" id="endtime" min="0" value="100" type="range" data-highlight="true" data-theme="b" />
-				</div>
-	  	    </div>
-	  	    </div>
-	  	    
-	  	   	<div class="ui-field-contain">
-				<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
-					<legend>Video cotrol: </legend>
-					<label for="sliderradio">Slider</label>
-					<input type="radio" id="sliderradio" name="controltype" value="slide" data-mini="true" data-theme="b"/>
-					<label for="buttonsradio">Buttons</label>
-					<input type="radio" id="buttonsradio" name="controltype" value="buttons" data-mini="true" data-theme="b"/>	
-				</fieldset>
-			</div>
-	  	    	 
-			 
-			 <div id="jumpdiv">
-			  <fieldset class="ui-field-contain" data-type="horizontal">
-    		  		<label for="jump">Jump (sec):</label>
-					<input type="range" name="jump" id="jump" value="0" min="1" max="60" data-highlight="true" data-theme="b" data-mini="true"/>
-	  	      </fieldset>
-			</div>
+		  	    <div class="ui-field-contain" id="videotimerange">
+		  	    	<div data-role="rangeslider" data-mini="true">
+						<label for="starttime">Start &amp; End Time (sec):</label>
+						<input name="starttime" id="starttime" min="0" value="0" type="range" data-highlight="true" data-theme="b" />
+						<label for="endtime">Video Start &amp; End Time:</label>
+						<input name="endtime" id="endtime" min="0" value="100" type="range" data-highlight="true" data-theme="b" />
+					</div>
+		  	    </div>
+	  	    </div>	 
 			
 			<div>
 				<fieldset class="ui-field-contain" data-type="horizontal">
@@ -256,23 +238,6 @@
 				  </fieldset>
 				</div>
 				
-				<div id="buttonsdiv">
-	
-					<fieldset class="ui-field-contain" >
-			    	  	<label for="backward">Backward:</label>
-						<select name="backward" id="backward" data-role="slider" data-mini="true" data-theme="b" >
-		    				<option value="off">Off</option>
-		    				<option value="on">On</option>
-						</select>
-					</fieldset>
-					<fieldset class="ui-field-contain" >
-						<label for="forward">Forward:</label>
-						<select name="forward" id="forward" data-role="slider" data-mini="true" data-theme="b" >
-		    				<option value="off">Off</option>
-		    				<option value="on">On</option>
-						</select>
-				 	</fieldset>
-				</div>
 	    	  	<fieldset class="ui-field-contain" data-type="horizontal">
 		    	  	<label for="volume">Volume:</label>
 					<select name="volume" id="volume" data-role="slider" data-mini="true" data-theme="b" >
