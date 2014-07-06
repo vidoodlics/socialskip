@@ -5,14 +5,14 @@ http://www.socialskip.org/
 
 ### Introduction
 
-SocialSkip can be employed in real or experimental scenarios to generate user activity graphs of an online video, by analyzing users’ interactions with the system, such as play, pause, skip/scrub.The SocialSkip system employs a custom web-video player and a web-database to keep a record of basic user actions (play, pause, and skip).
+SocialSkip can be employed in real or experimental scenarios to generate user activity graphs of an online video, by analyzing users’ interactions with the system, such as play, pause, skip/scrub. The SocialSkip system employs a custom web-video player and a web-database to keep a record of basic user actions (play, pause, and skip).
 
 SocialSkip is also integrated with Google Drive, which allows the addition of a questionnaire next to the video. This feature has been useful in video experiments for learning, which include quiz questions next to the video.
 
-The main feature of SocialSkip is a video browser with custom player buttons that collect user interactions with the video to a data-base.
+The main feature of SocialSkip is a video browser with custom player buttons that collects user interactions with the video to a data-base.
 
 
-This web app integrate the following technologies and tools:
+This web app integrates the following technologies and tools:
 
 * Google App Engine
 * AppEngine Java SDK
