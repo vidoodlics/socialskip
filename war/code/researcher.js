@@ -1,6 +1,6 @@
 var slide = 0x01; // Buttons - Slider bit mask
 var play = 0x02; // Play button bit mask
-var jump = 0x3F << 4; // Jump duration bit mask (6 bits 0-63 seconds)
+//var jump = 0x3F << 4; // Jump duration bit mask (6 bits 0-63 seconds)
 var interaction = 0xFF << 10; // Total interaction time bit mask (8 bits 0-255 minutes)
 var volume = 0x40000; // Volume bit mask
 var fullscreen = 0x80000; // fullscreen button bit mask
@@ -40,8 +40,9 @@ var newrow = '<div data-role="collapsible-set" data-theme="b" data-mini="true" i
 			'<td><input type="button" value="Edit" data-icon="edit" class="edit" data-mini="true" />' +
 			'<input type="button" value="Charts" data-icon="eye" class="charts" data-mini="true" />' +
 			'<input type="button" value="Get URL" data-icon="carat-r" class="geturl" data-mini="true" />' +
+			'<input type="button" value="Embed" data-icon="carat-r" class="getcode" data-mini="true" />' +
+			'<input type="button" value="Download data" data-icon="arrow-d" class="download" data-mini="true" />' +
 			'<input type="button" value="Delete" data-icon="delete" class="delete" data-mini="true" />' +
-			'<input type="button" value="Download data" data-icon="arrow-d" class="data" data-mini="true" />' +
 			'</td>' +
 			'</tr>' +
 			'</table>' +
@@ -58,9 +59,6 @@ function toControls(fld) {
 	$("#buttonsradio").prop("checked",false).checkboxradio("refresh");
 	$(control).prop("checked",true).checkboxradio("refresh");
 	$("#play").val(((fld & play) != 0) ? 'on' : 'off').change().slider('refresh');
-	$("#forward").val(((fld & forward) != 0) ? 'on' : 'off').change().slider('refresh');
-	$("#backward").val(((fld & backward) != 0) ? 'on' : 'off').change().slider('refresh');
-	$("#jump").val((fld & jump) >>> 4).slider('refresh');
 	$("#interaction").val((fld & interaction) >>> 10).slider('refresh');
 	$("#volume").val(((fld & volume) != 0) ? 'on' : 'off').change().slider('refresh');
 	$("#fullscreen").val(((fld & fullscreen) != 0) ? 'on' : 'off').change().slider('refresh');
@@ -68,13 +66,6 @@ function toControls(fld) {
 	$("#playbackrate").val(((fld & playbackrate) != 0) ? 'on' : 'off').change().slider('refresh');
 }
 
-
-/* 
- * This function return a time from jump. 
- */
-function getJump(fld) {
-	return ((fld & jump) >>> 4);
-}
 
 
 /* This function is the opposite from the previous. It translates the values of the various 
@@ -93,7 +84,7 @@ function fromControls() {
 		fld |= quality;
 	if ($('#playbackrate option:selected').val() == 'on')
 		fld |= playbackrate;
-	fld |= ($("#jump").val() << 4);
+	//fld |= ($("#jump").val() << 4);
 	fld |= ($("#interaction").val() << 10);
 
 	
@@ -290,21 +281,17 @@ function insert() {
 	$("#more").hide();
 	$("#info").val("");
 	$("#action").val("2");
-	setVideoRange($("#videourl").val());
+	$("#submit").val("Create"); // Submit button label
     $.mobile.changePage($("#videoinfo"));
     toControls($("#controls").val());
     $("#play").val('on').change().slider('refresh');
-    $("#forward").val('on').change().slider('refresh');
-    $("#backward").val('on').change().slider('refresh');
-    $("#submit").val("Create").button('refresh');
 	$("#volume").val('on').change().slider('refresh');
 	$("#fullscreen").val('on').change().slider('refresh');
 	$("#quality").val('on').change().slider('refresh');
 	$("#playbackrate").val('on').change().slider('refresh');
 	$("#sliderradio").prop("checked",true).checkboxradio("refresh");
 	$("#buttonsradio").prop("checked",false).checkboxradio("refresh");
-	$("#buttonsdiv").hide();
-	$("#jumpdiv").hide();
+	$("#buttonsdiv").hide();	
 }
 
 /* This function is executed when the user presses the Delete button. It 
