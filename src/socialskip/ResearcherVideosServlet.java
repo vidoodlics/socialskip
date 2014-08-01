@@ -41,53 +41,54 @@ public class ResearcherVideosServlet extends HttpServlet {
 		int action = Integer.parseInt(req.getParameter("action")); // Kind of action requested from user
 		PrintWriter out = resp.getWriter();
 		String result = "OK";
-		String videoUrl = req.getParameter("videourl");
 		String descr = req.getParameter("descr").trim();
-		String info = req.getParameter("info");
-		String question = req.getParameter("question");
 		
 		if (action == 1 || action == 2) {
-				videoUrl = videoUrl.replace("<", "");
-				descr = descr.replace("<", "");
-				descr = descr.replace(">", "");
+				descr = descr.replaceAll("[<>]","");
 				descr = descr.replace("'", "&#39;");
 				descr = descr.replace("\"", "&#34;");
-				info = info.replace("<", "");
-				question = question.replace("<", "");
-			    
 		}
 
     	try {
 			if ((req.getParameter("researcher")).equals(UserInfo.getResearcherID()) ) {
+				
 				FusionApi tables = new FusionApi();
 				if (action == 1) { // Update experiment info
 					if (isVideoResearcher(req.getParameter("expid"))) {
 						String query = "UPDATE " + FusionApi.EXPERIMENTS
-								+ " SET VideoURL='" + videoUrl + "', Title='"
-								+ descr + "', Controls='"
-								+ req.getParameter("controls")
-								+ "', TimeRange='" + req.getParameter("vtimerange")
-								+ "', Questionnaire='" + question + "', Info='"
-								+ info +  "', IconColor='"
-								+ req.getParameter("icolor") + "', PgsColor='"
-								+ req.getParameter("pcolor") + "', BgColor='" 
-								+ req.getParameter("bcolor") + "' WHERE ROWID='"
-								+ req.getParameter("expid") + "'";
+								+ " SET VideoURL='" + req.getParameter("videourl").replaceAll("[<>'\"]","") 
+									+ "', Title='" + descr 
+									+ "', Controls='" + req.getParameter("controls")
+									+ "', TimeRange='" + req.getParameter("vtimerange")
+									+ "', Questionnaire='" + req.getParameter("question").replaceAll("[<>'\"]","") 
+									+ "', Info='" + req.getParameter("info").replaceAll("[<>'\"]","") 
+									+ "', IconColor='" + req.getParameter("icolor").replaceAll("[<>'\"]","") 
+									+ "', PgsColor='" + req.getParameter("pcolor").replaceAll("[<>'\"]","") 
+									+ "', BgColor='" + req.getParameter("bcolor").replaceAll("[<>'\"]","") 
+								+ "' WHERE ROWID='" + req.getParameter("expid") + "'";
 						tables.run(query);
 					} else {
 						result = "ERROR";
 					}
+					
 				} else if (action == 2) { // Create new experiment
+					
 					String query = "INSERT INTO "
 							+ FusionApi.EXPERIMENTS
 							+ " (ResearcherId, VideoURL, "
 							+ "Title, Controls, Questionnaire, Info, TimeRange, IconColor, PgsColor, BgColor) VALUES ('"
 							+ req.getParameter("researcher") + "', '"
-							+ videoUrl + "', '" + descr + "', '"
-							+ req.getParameter("controls") + "', '" + question
-							+ "', '" + info + "', '" + req.getParameter("vtimerange") + "', '" + req.getParameter("icolor") + "', '" + req.getParameter("pcolor") + "', '" + req.getParameter("bcolor") + "')";
+							+ req.getParameter("videourl").replaceAll("[<>'\"]","")  + "', '" + descr + "', '"
+							+ req.getParameter("controls") + "', '" 
+							+ req.getParameter("question").replaceAll("[<>'\"]","") + "', '"
+							+ req.getParameter("info").replaceAll("[<>'\"]","") + "', '"
+							+ req.getParameter("vtimerange") + "', '"
+							+ req.getParameter("icolor").replaceAll("[<>'\"]","") + "', '"
+							+ req.getParameter("pcolor").replaceAll("[<>'\"]","") + "', '"
+							+ req.getParameter("bcolor").replaceAll("[<>'\"]","") + "')";
 					tables.run(query);
 					result = tables.getFirstRow()[0];
+					
 				} else if (action == 3) { // Delete experiment
 					if (isVideoResearcher(req.getParameter("expid"))) {
 						String query = "DELETE FROM " + FusionApi.EXPERIMENTS
@@ -109,6 +110,7 @@ public class ResearcherVideosServlet extends HttpServlet {
     	out.print(result);
 	}
 	
+	
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 		Gson gson = new Gson(); // JSON conversion
@@ -118,8 +120,9 @@ public class ResearcherVideosServlet extends HttpServlet {
 		
     	try {
     		FusionApi tables = new FusionApi();
-    		String query = "SELECT ResearcherId, VideoURL, Questionnaire, Controls, Info, Title, TimeRange, IconColor, PgsColor, BgColor  FROM " + FusionApi.EXPERIMENTS + 
-    				" WHERE ROWID='" + req.getParameter("expid") + "'";
+    		String query = "SELECT ResearcherId, VideoURL, Questionnaire, Controls, Info, Title, TimeRange, IconColor, PgsColor, BgColor "
+    				+ "FROM " + FusionApi.EXPERIMENTS
+    				+ " WHERE ROWID='" + req.getParameter("expid") + "'";
     		tables.run(query);
    			result = gson.toJson(tables.getFirstRow());
 	    } catch (AuthenticationException e) {
