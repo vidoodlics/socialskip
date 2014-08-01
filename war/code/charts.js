@@ -8,6 +8,7 @@ function backwardTimeseriesChart() {
 	google.load("visualization", "1.0", {"callback" : backwardChart, 'packages':["table", "corechart"]});
 }
 	
+
 function backwardChart() {
 	
 	var expid = ($("#charts").html());
@@ -17,13 +18,12 @@ function backwardChart() {
 	var query = new google.visualization.Query('http://www.google.com/fusiontables/gvizdata?tq=');
 	var queryString = "SELECT Time, SkipTime, Count() FROM " + chartdata + " WHERE VideoId='" + expid +
 	 "' AND TransactionId='1' GROUP BY Time, SkipTime ORDER BY Time";
-	// Request only Time, TransactionId and Count grouped by Time and TransactionId. Replace ID with
-	// your table ID (Table 4 in Implementation Document)
 	query.setQuery(queryString);
 	
 	// Send the query with a callback function.
 	query.send(handleQueryResponse1);
 }
+
 
 /* This function takes the response from the Fusion Table Service and prepares the */
 function handleQueryResponse1(response) {
@@ -79,6 +79,7 @@ function forwardTimeseriesChart() {
 	google.load("visualization", "1.0", {"callback" : forwardChart, 'packages':["table", "corechart"]});
 }
 	
+
 function forwardChart() {
 	
 	var expid = ($("#charts").html());
@@ -95,6 +96,7 @@ function forwardChart() {
 	// Send the query with a callback function.
 	query.send(handleQueryResponse2);
 }
+
 
 /* This function takes the response from the Fusion Table Service and prepares the */
 function handleQueryResponse2(response) {
@@ -118,6 +120,7 @@ function handleQueryResponse2(response) {
 	
 }	
 	
+
 function forwardTimeseries(response) {
 	var begin, end;
 	
@@ -140,6 +143,7 @@ function forwardTimeseries(response) {
 	
 	return bts; // return backward timeseries table
 }
+
 
 function zeroone(dataTable, rowNum){
 	var max = dataTable.getColumnRange(1).max;
@@ -171,11 +175,12 @@ function downloadBackwardTimeseries() {
 				
 					var timeseries = backwardTimeseries(response);
 				
-					downloadCSV(timeseries, video_title)
+					downloadCSV(timeseries, video_title, "Backward")
 				});		
 			}
 			});
 }
+
 
 function downloadForwardTimeseries() {
 	google.load('visualization', '1.0',
@@ -201,15 +206,14 @@ function downloadForwardTimeseries() {
 				
 					var timeseries = forwardTimeseries(response);
 				
-					downloadCSV(timeseries, video_title);
+					downloadCSV(timeseries, video_title, "Forward");
 				});		
 			}
 			});
 }
 
 
-
-function downloadCSV(timeseries, video_title) {
+function downloadCSV(timeseries, video_title, interaction) {
 	var csvRows = [];
 	
 	csvRows.push('Time,Count');
@@ -227,7 +231,7 @@ function downloadCSV(timeseries, video_title) {
 	var a = document.createElement('a');
 	a.href = uri;
 	a.target = '_blank';
-	a.download = 'Forward_Timeseries-' + video_title + '.csv';
+	a.download = interaction + '_Timeseries-' + video_title + '.csv';
 	document.body.appendChild(a);
 	a.click();
 }
