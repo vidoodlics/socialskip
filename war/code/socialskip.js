@@ -75,8 +75,8 @@ function createPlayer($elem, analysisid, videoinfo) {
 	players[analysisid].video_controls = controls;
 	players[analysisid].exp_start = false;
 	
-	players[analysisid].video_startTime = (videoinfo[6] & (0xFFF));
-	players[analysisid].video_endTime = (videoinfo[6] & (0xFFF) << 12) >>> 12;
+	players[analysisid].video_startTime = (videoinfo[6] & (0x3FFF));
+	players[analysisid].video_endTime = (videoinfo[6] & (0x3FFF) << 14) >>> 14;
 	
 	players[analysisid].video_interactionTime = ((videoinfo[3] & (0xFF << 10)) >>> 10) * 60;
 	players[analysisid].video_jump = (videoinfo[3] & (0x3F << 4)) >>> 4;

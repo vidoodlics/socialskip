@@ -7,13 +7,12 @@ var fullscreen = 0x80000; // fullscreen button bit mask
 var quality = 0x100000  // quality button bit mask
 var playbackrate = 0x200000  // playbackrate button bit mask
 
-var starttime = 0xFFF;
-var endtime = 0xFFF << 12;
+var starttime = 0x3FFF; // start time bit mask (14 bits 0-16384 seconds)
+var endtime = 0x3FFF << 14; // end time bit mask (14 bits 0-16384 seconds)
 
 var row;
 
-	
-// New experiment row HTML code 
+// New experiment HTML code 
 var newrow = '<div data-role="collapsible-set" data-theme="b" data-mini="true" id="expdiv">' +
 			 '<div data-role="collapsible" data-theme="b" >' +
 			 '<h2><a class="ui-collapsible-heading-toggle ui-btn ui-mini ui-btn-icon-left ui-btn-b ui-icon-minus ui-btn-active" href="#"> </a></h2>' +
@@ -30,7 +29,6 @@ var newrow = '<div data-role="collapsible-set" data-theme="b" data-mini="true" i
 			 '<td class="hidden"></td>' +
 			 '<td class="hidden"></td>' +
 			 '<td class="hidden"><td>' +
-			
 			 '<td class="videohide" style="margin-right:5px">' +
 			 '<iframe id="player" type="text/html" width="416" height="259"' +
 					'src=""' +
@@ -67,9 +65,8 @@ function toControls(fld) {
 }
 
 
-
 /* This function is the opposite from the previous. It translates the values of the various 
- * controls (Buttons/Slider, Play, Forward and Backward buttons plus the Jump value and total
+ * controls (Slider, Play, Volume, Fullscreen, Quality and Palyback Rate buttons plus the Jump value and total
  * Interaction time) selected by the user into an integer. 
  */
 function fromControls() {
@@ -84,22 +81,25 @@ function fromControls() {
 		fld |= quality;
 	if ($('#playbackrate option:selected').val() == 'on')
 		fld |= playbackrate;
-	//fld |= ($("#jump").val() << 4);
 	fld |= ($("#interaction").val() << 10);
 
-	
 	return fld;
 }
 
+
+/* It translates the values of start and end time selected by the user into an integer. */
 function fromVideoRange() {
 	var fvr = 0;
 	fvr |= ($("#starttime").val());
-	fvr |= ($("#endtime").val() << 12);
+	fvr |= ($("#endtime").val() << 14);
 	
 	return fvr;
 }
 
 
+/* This function is executed when the user presses the embed button in a 
+ * experiments list
+ */
 function getcode() {
 	row = $(this).closest("tr"); // List item that contains the experiment data
 	var expid = $("td:eq(1)", row).html();
@@ -107,11 +107,11 @@ function getcode() {
 	$.mobile.changePage($("#codeinfo"));
 }
 
+
 /* This function is executed when the user presses the edit button in a 
  * experiment description. It fills the form input controls with the values 
  * for the experiment so as to enable the user to edit them.
  */
-
 function edit() {
 	removeWarnings();
 	row = $(this).closest("tr"); // Table row that contains the experiment data
@@ -171,7 +171,7 @@ function setVideoRange(videourl) {
 			    $("#endtime").attr("max", videoduration).slider("refresh");		
 			    fvr = parseInt($("#vtimerange").val());
 			    $("#starttime").val((fvr & starttime) ).slider('refresh');
-				$("#endtime").val((fvr & endtime) >>> 12).slider('refresh');
+				$("#endtime").val((fvr & endtime) >>> 14).slider('refresh');
 				
 				if(parseInt($("#endtime").val()) == 0 ) {
 					$("#endtime").val(videoduration).slider('refresh');
