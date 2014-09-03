@@ -115,7 +115,7 @@ public class ResearcherVideosServlet extends HttpServlet {
 			throws IOException {
 		Gson gson = new Gson(); // JSON conversion
 		PrintWriter out = resp.getWriter();
-		String result;
+		String result = "[]";
 		String callback = req.getParameter("callback");
 		
     	try {
@@ -124,7 +124,9 @@ public class ResearcherVideosServlet extends HttpServlet {
     				+ "FROM " + FusionApi.EXPERIMENTS
     				+ " WHERE ROWID='" + req.getParameter("expid") + "'";
     		tables.run(query);
-   			result = gson.toJson(tables.getFirstRow());
+    		if (tables.rowCount() == 1) {
+    			result = gson.toJson(tables.getFirstRow());
+    		}
 	    } catch (AuthenticationException e) {
 	    	result = gson.toJson("ERROR");
 	    } catch (ServiceException e) {
