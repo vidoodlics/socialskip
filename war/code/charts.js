@@ -11,7 +11,7 @@ function backwardTimeseriesChart() {
 
 function backwardChart() {
 	
-	var expid = ($("#charts").html());
+	var expid = ($("#charts").val());
 	
 	// Replace the data source URL on next line with your data source URL.
     // Specify that we want to use the XmlHttpRequest object to make the query.
@@ -82,7 +82,7 @@ function forwardTimeseriesChart() {
 
 function forwardChart() {
 	
-	var expid = ($("#charts").html());
+	var expid = ($("#charts").val());
 	
 	// Replace the data source URL on next line with your data source URL.
     // Specify that we want to use the XmlHttpRequest object to make the query.
@@ -154,8 +154,8 @@ function zeroone(dataTable, rowNum){
 function downloadBackwardTimeseries() {
 	google.load('visualization', '1.0',
 			{"callback" : function () {
-				var expid = ($("#dlexpid").html());
-				var video_title = ($("#dltitle").html());
+				var expid = ($("#dlexpid").val());
+				var video_title = ($("#dltitle").val());
 				
 				// Replace the data source URL on next line with your data source URL.
 			    // Specify that we want to use the XmlHttpRequest object to make the query.
@@ -185,8 +185,8 @@ function downloadBackwardTimeseries() {
 function downloadForwardTimeseries() {
 	google.load('visualization', '1.0',
 			{"callback" : function () {
-				var expid = ($("#dlexpid").html());
-				var video_title = ($("#dltitle").html());
+				var expid = ($("#dlexpid").val());
+				var video_title = ($("#dltitle").val());
 				
 				// Replace the data source URL on next line with your data source URL.
 			    // Specify that we want to use the XmlHttpRequest object to make the query.

@@ -352,8 +352,8 @@ function getURL() {
 */
 function getCharts() {
 	row = $(this).closest("tr");
-	$("#charts").html($("td:eq(1)", row).html()); 
-	$("#controls").html($("td:eq(3)", row).html());
+	$("#charts").val($("td:eq(1)", row).html()); 
+	$("#controls").val($("td:eq(3)", row).html());
 	//$("div#page").attr("class", "opacity");
 	//$("#viewcharts").dialog({width: 600, beforeClose: function(event,ui){ $("div#page").removeAttr("class"); }});
 	$.mobile.changePage($("#viewcharts"));
@@ -366,8 +366,8 @@ function getCharts() {
 */
 function download() {
 	row = $(this).closest("tr");
-	$("#dlexpid").html($("td:eq(1)", row).html()); 
-	$("#dltitle").html($("td:eq(0)", row).html());
+	$("#dlexpid").val($("td:eq(1)", row).html()); 
+	$("#dltitle").val($("td:eq(0)", row).html());
 	//$("div#page").attr("class", "opacity");
 	//$("#viewcharts").dialog({width: 600, beforeClose: function(event,ui){ $("div#page").removeAttr("class"); }});
 	$.mobile.changePage($("#download"));
@@ -375,10 +375,9 @@ function download() {
 
 
 function downloadData() {
-	row = $(this).closest("tr");
 	
-	var expid = ($("#dlexpid").html());
-	var video_title = ($("#dltitle").html());
+	var expid = ($("#dlexpid").val());
+	var video_title = ($("#dltitle").val());
 	
 	window.location.href ="/download?videoid=" + expid + "&video=" + video_title;
 	return false;
