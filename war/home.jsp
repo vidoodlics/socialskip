@@ -15,15 +15,16 @@
 	<!-- Facebook Meta Data -->
 	<meta property="og:title" content="SocialSkip"/>
 	<meta property="og:image" content="http://i57.tinypic.com/do2qs6.jpg"/>
-	<meta property="og:url" content="http://socialskip.appspot.com" />
+	<meta property="og:url" content="http://www.socialskip.org" />
 	<meta property="og:site_name" content="SocialSkip" />
 	<meta property="og:type" content="website" />
 	<meta property="og:description" content="SocialSkip can be employed in real or experimental scenarios to generate user activity graphs of an online video, by analyzing users’ interactions with the system, such as play, pause, skip/scrub.The SocialSkip system employs a custom web-video player and a web-database to keep a record of basic user actions (play, pause, and skip)." />
 	
-	<meta name="description" content="SocialSkip. The implementation of a web-video system with a novel user-based sense-making method. SocialSkip can be employed in real or experimental scenarios to generate user activity graphs of an online video, by analyzing users’ interactions with the system, such as play, pause, skip/scrub.The SocialSkip system employs a custom web-video player and a web-database to keep a record of basic user actions (play, pause, and skip)." />
-	<meta name="keywords" content="socialskip,service,web,video,experiment,interaction,appengine,ionian,university">
+	<meta name="description" content="SocialSkip can be employed in real or experimental scenarios to generate user activity graphs of an online video, by analyzing users’ interactions with the system, such as play, pause, skip/scrub.The SocialSkip system employs a custom web-video player and a web-database to keep a record of basic user actions (play, pause, and skip)." />
+	<meta name="keywords" content="socialskip.org,socialskip,video,analytics,video for learning,user activity,interactions,custom player,appengine,ionian university,ιόνιο πανεπιστήμιο">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" type="text/css" href="/css/responsive.css" />
+	<link rel="stylesheet" type="text/css" href="/css/home.css" />
 	<link rel="stylesheet" type="text/css" href="/css/dropdownmenu/ddm.css"/>
 	<link rel="stylesheet" href="css/themes/black-theme.min.css" />
 	<link rel="stylesheet" href="css/themes/jquery.mobile.icons.min.css" />
@@ -35,6 +36,7 @@
 	<script src="css/owl-carousel/owl.carousel.min.js"></script>
 	<script src="/code/responsive.js" type="text/javascript"></script> 
 	<script src="/css/dropdownmenu/ddm.js" type="text/javascript"></script> 
+	<script src="/code/googleanalytics.js" type="text/javascript"></script> 
 	<script>
 	$(document).ready(function() {
 	 	$("#owl-demo").owlCarousel({
@@ -52,22 +54,6 @@
 	    		custom_theme_widget: 'recaptcha_widget'
 	    };
 	</script>
-	
-	
-	<style>
-	
-	#recaptcha_image {
-	    max-width: 210px;
-	    overflow: hidden;
-	    border:1px solid #B0B0B0;
-		border-radius:6px;
-	}
-	
-	#recaptcha_image img {
-	    max-width: 210px;
-	}
-	
-	</style>	
 	            
 </head>
 
@@ -77,7 +63,7 @@
 <div data-role="page" data-theme="a" id="homePage">
 	<div data-role="header" data-tap-toggle="false" data-position="fixed">
 		<div class="responsive">
-			<a href="/home" data-icon="home" rel="external" data-ajax="false" data-role="button">SocialSkip</a>
+			<a href="http://www.socialskip.org/home" data-icon="home" rel="external" data-ajax="false" data-role="button">SocialSkip</a>
 			<% 
 			boolean isResearcher = false;
 			try {
@@ -107,7 +93,7 @@
 		</div>
 	</div>	
 	
-	<div data-role="content" style="background-color:#3498db;min-height:400px;color:#FFFFFF;font-size:16px;">
+	<div data-role="content" id="carousel">
 		<div class="responsive">
 			<div id="owl-demo" class="owl-carousel">
     			<div class="item" style="height:370px;">
@@ -115,7 +101,7 @@
     					<tr>
     						<td valign="middle">
 	    						<span class="responhide">
-	    							<img src="/images/cloud.png" alt="home" style="float:left;margin-right:40px;margin-left:40px;" >
+	    							<img src="/images/cloud.png" alt="home" class="img-carousel">
 								</span>
 							</td>
 							
@@ -131,7 +117,7 @@
     					<tr>
     						<td valign="middle">
 								<span class="responhide"><br>
-									<img src="/images/ionianuniversity.png" alt="graph" style="float:left;margin-right:40px;margin-left:40px;">
+									<img src="/images/ionianuniversity.png" alt="graph" class="img-carousel">
 								</span>
 							</td>
 							
@@ -147,8 +133,8 @@
 		</div>
 	</div>
 	
-	<div data-role="content" style="background-color:#ecf0f1;height:24px;">
-		<div class="responsive" style="text-align:center;">
+	<div data-role="content" id	="socialbuttons">
+		<div class="responsive" style="text-align:center;margin-top:5px;">
 			<table style="margin: auto;">
 				<tr>
 					<td>
@@ -177,29 +163,49 @@
 		</div>
 	</div>
 	
-	<div data-role="content" style="min-height:350px;color:#000000;">
+	<div data-role="content" id="whatis">
 		<div class="responsive">
-			<p style="font-size:26px;">What is SocialSkip?</p>
+			<br>
+			<h1>What is SocialSkip?</h1>
 			<p>SocialSkip can be employed in real or experimental scenarios to generate user activity graphs of an online video, by analyzing users’ interactions with the system, such as play, pause, skip/scrub.The SocialSkip system employs a custom web-video player and a web-database to keep a record of basic user actions (play, pause, and skip).</p>
 			<p>SocialSkip is also integrated with Google Drive, which allows the addition of a questionnaire next to the video. This feature has been useful in video experiments for learning, which include quiz questions next to the video.</p>
 			<p>The main feature of SocialSkip is a video browser with custom player buttons that collect user interactions with the video to a data-base.</p>
-			<p>The SocialSkip system operates on Google App Engine and provides integration of YouTube videos and Drive documents.</p>
+			<p>This system operates on Google App Engine and provides integration of YouTube videos and Drive documents.</p>
 		</div>
 	</div>
 	
-	<div data-role="content" style="background-color:#ecf0f1;text-align:center;">
+	<div data-role="content" id="partners">
 		<div class="responsive">
-			<p style="font-size:22px;color:#000000;">Partner Organization</p>
-			<p><img alt="Center for Real-time Computing" src="http://www.spl.harvard.edu/SPLWeb/images/1/12/Logo_CRTC.png"></p>
-			<p><a href="http://crtc.wm.edu/" target="_blank">Center for Real-time Computing</a></p>
+			<h2>Partner Organizations</h2>
+			<div class="responsive">
+				<div class="ui-grid-a">
+	                <div class="ui-block-a"">
+	                	<div>
+		                	<p><a style="text-decoration:none" href="http://crtc.wm.edu/" target="_blank"><img alt="Center for Real-time Computing" src="http://www.spl.harvard.edu/SPLWeb/images/1/12/Logo_CRTC.png"></a></p>
+							<p><a style="text-decoration:none" href="http://crtc.wm.edu/" target="_blank">Center for<br>Real-time Computing</a></p>
+	                	</div>
+	                </div>
+	                <div class="ui-block-b">
+	                	<div>
+		                	<p><a style="text-decoration:none" href="http://www.ntnu.no/" target="_blank"><img alt=" Norwegian University of Science and Technology" style="width:68px;height:80px;" src="http://www.q2s.ntnu.no/iwscn2009/ntnu-logo.png"></a></p>
+							<p><a style="text-decoration:none" href="http://www.ntnu.no/" target="_blank">Norwegian University of<br>Science and Technology</a></p>
+	                	</div>
+	                </div>                
+	            </div>
+           	</div>
 		</div>
 	</div>
 	
-	<div data-role="footer">
+	<div data-role="footer" id="footer">
 		<div class="responsive">
-			<a href="/welcome" rel="external" data-ajax="false" data-role="button">socialskip.appspot.com</a>
+			 <div class="ui-grid-a" style="margin:16px;">
+                <div class="ui-block-a" style="text-align: left;">SocialSkip is maintained by <a style="text-decoration:none" href="https://github.com/vidoodlics" target="_blank">vidoodlics</a></div>
+                <div class="ui-block-b" style="text-align: right;">Github: <a style="text-decoration:none" href="http://vidoodlics.github.io/socialskip/" target="_blank">Page</a>, <a style="text-decoration:none" href="https://github.com/vidoodlics/socialskip" target="_blank">Source</a>, <a style="text-decoration:none" href="https://github.com/vidoodlics/socialskip/issues" target="_blank">Issues</a></div>                
+            </div>
 		</div>
 	</div>
+	
+	<!-- ///////////// -->
 	
 	<div data-role="panel" data-position="right" data-position-fixed="true" data-display="overlay" data-theme="a" id="add-form">
 		<div id="signUpFormDiv">

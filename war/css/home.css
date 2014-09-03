@@ -1,0 +1,55 @@
+#carousel {
+	background-color:#3498db;
+	min-height:400px;
+	color:#FFFFFF;
+	font-size:16px;"
+}
+
+#socialbuttons {
+	background-color:#ecf0f1;
+	padding:8px;
+}
+
+#whatis {
+	min-height:350px;
+	color:#000000;"
+}
+
+#partners {
+	background-color:#ecf0f1;
+	text-align:center;
+}
+
+#footer {
+	font-size:12px;
+	width: 100%;
+}
+
+.img-carousel {
+	float:left;
+	margin-left:40px;
+	margin-right: 40px;
+}
+
+#recaptcha_image {
+    max-width: 210px;
+    overflow: hidden;
+    border:1px solid #B0B0B0;
+	border-radius:6px;
+}
+
+#recaptcha_image img {
+    max-width: 210px;
+}
+
+
+h2 {
+	color: #000000;
+	font-weight: normal;
+}
+
+h1 {
+	font-size: 26px;
+	color: #000000;
+	font-weight: normal;
+}
