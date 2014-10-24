@@ -3,12 +3,12 @@ var tag = document.createElement('script');
 tag.src = "https://www.youtube.com/player_api";
 var firstScriptTag = document.getElementsByTagName('script')[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
+var socialskip_testerId = Math.floor((Math.random() * 999) + 1);
 var players = {};
+//var url = "http://127.0.0.1:8888/researcher_videos?callback=?";
+//var purl = "http://127.0.0.1:8888/interactions";
 var url = "http://MY_APP_ID.appspot.com/researcher_videos?callback=?";
 var purl = "http://MY_APP_ID.appspot.com/interactions";
-//var url = "http://127.0.0.1:8888/researcher_videos?callback=?";
-//var purl = "http://127.0.0.1:8888/fusion";
 var slide = 0x01; // Buttons - Slider bit mask
 var play = 0x02; // Play button bit mask
 //var forward = 0x04; // Forward button bit mask
@@ -38,20 +38,21 @@ function createPlayer($elem, analysisid, videoinfo) {
 	// 8 -> PgsColor
 	// 9 -> BgColor
 	
-	var pos = videoinfo[1].lastIndexOf('/');
-	pos = ((pos == -1) ? 0 : pos + 1);
+	var pos = videoinfo[1].lastIndexOf('/'); // get the position of the last occurrence of "/" character
+	
 	var params = { 	height: playerheight, 
 					width: playerwidth,
-					videoId: videoinfo[1].substr(pos),
+					videoId: videoinfo[1].substr(pos), // extract only id from video url
 					events: {
 						'onReady': onPlayerReady
               		}
               	 };
+	
 	var controls = parseInt(videoinfo[3]);
 	var elemid = 'socialskip' + analysisid;
 	
 	if ($elem.attr('data-socialskip') == 'true') {
-		$elem.wrap('<div id="socialskipplayer' + analysisid + '" data-expid="' + analysisid + '"></div>');
+		$elem.wrap('<div id="socialskipplayer' + analysisid + ' style="border-radius: 0px;"></div>');
 		createMarkup($elem, analysisid, videoinfo);
 		params.playerVars = { 
 				'modestbranding': 1,
@@ -70,49 +71,48 @@ function createPlayer($elem, analysisid, videoinfo) {
 	$elem.removeAttr('data-socialskip');
 	$elem.attr('id', elemid);
 	
-	players[analysisid] = new YT.Player(elemid, params);
-	players[analysisid].video_id = analysisid;
-	players[analysisid].video_controls = controls;
-	players[analysisid].exp_start = false;
+	players[analysisid] = new YT.Player(elemid, params); // create new object
 	
-	players[analysisid].video_startTime = (videoinfo[6] & (0x3FFF));
-	players[analysisid].video_endTime = (videoinfo[6] & (0x3FFF) << 14) >>> 14;
+	players[analysisid].video_id = analysisid; // experiment id
+	players[analysisid].video_controls = controls; // controls value
+	players[analysisid].exp_start = true; // boolean value to check if the experiment has started
 	
-	players[analysisid].video_interactionTime = ((videoinfo[3] & (0xFF << 10)) >>> 10) * 60;
-	players[analysisid].video_jump = (videoinfo[3] & (0x3F << 4)) >>> 4;
-	
-	players[analysisid].state_ended = false;
-	
-	players[analysisid].interactions = [];
-	
-	if (parseInt(((controls & (0xFF << 10)) >>> 10) * 60) != 0 || videoinfo[2] != "") {
+	if(parseInt(((videoinfo[3] & (0xFF << 10)) >>> 10) * 60) != 0 || videoinfo[2] != "") {
 		players[analysisid].exp_start = false;
-	} else {
-		players[analysisid].exp_start = true;
 	}
 	
-	// check if player is not empty
+	players[analysisid].video_startTime = (videoinfo[6] & (0x3FFF)); // customized video start time
+	players[analysisid].video_endTime = (videoinfo[6] & (0x3FFF) << 14) >>> 14; // customized video end time
+	
+	players[analysisid].video_interactionTime = ((videoinfo[3] & (0xFF << 10)) >>> 10) * 60; // interaction time in seconds
+	
+	players[analysisid].state_ended = false; // boolean value for check if the video playback has ended
+	
+	players[analysisid].interactions = []; // buffer for interactions
+	
+	// check if icons color is not empty
 	if (videoinfo[7] != "") {
 		players[analysisid].icolor = videoinfo[7];
-	} else {
+	} else { // else set a default color
 		players[analysisid].icolor = "#E6E0DF";
 	}
 	
+	// check if progress color is not empty
 	if (videoinfo[8] != "") {
 		players[analysisid].pcolor = videoinfo[8];
-	} else {
+	} else { // else set a default color
 		players[analysisid].pcolor = "#00B3FF";
 	}
 	
+	// check if background color is not empty
 	if (videoinfo[9] != "") {
 		players[analysisid].bcolor = videoinfo[9];
-	} else {
+	} else { // else set a default color
 		players[analysisid].bcolor = "#454545";
 	}
 	
 	// call function for responsive layout
 	responsivelayout(analysisid);
-	
 }
 
 function onPlayerReady(event) 
@@ -132,10 +132,6 @@ function onPlayerReady(event)
 	
 	// draw pause button
 	drawPauseButton(analysisid);
-	// draw forward button
-	//drawForwardButton(analysisid)
-	// draw backward button
-	//drawBackwardButton(analysisid)
 	// draw circle seekpos
 	drawCircleSeekpos(analysisid)
 	// draw fullscreen button
@@ -169,58 +165,6 @@ function onPlayerReady(event)
 		playpause(analysisid);
 	});	
 	
-	/*
-	// backward button click
-	$( "#socialskip" + analysisid + "_backward" ).click(function() { 
-		var p = players[analysisid];
-		if (p.exp_start) {
-			var cur = Math.round(p.getCurrentTime())
-			if(cur > p.video_startTime) {
-				var seekto = cur - p.video_jump;
-				
-				seek(analysisid, seekto, SEEK_START);
-			
-
-				var today = new Date(); // Get the current time
-				
-				p.interactions.push({
-			        'expid': analysisid,
-			        'tester': getCookie("testerId"),
-			        'code': '1',
-			        'vtime': seekto,
-			        'ctime': today.getTime(),
-			        'jump': p.video_jump
-			    }); 
-			}
-		}
-	});	
-	
-	
-	// forward button click
-	$( "#socialskip" + analysisid + "_forward" ).click(function() {
-		var p = players[analysisid];
-		if (p.exp_start) {
-			var cur = Math.round(p.getCurrentTime())
-			if(cur < p.video_endTime) {
-				
-				var seekto = cur + p.video_jump;
-				
-				seek(analysisid, seekto, SEEK_START);
-			
-				var today = new Date(); // Get the current time
-				
-				p.interactions.push({
-			        'expid': analysisid,
-			        'tester': getCookie("testerId"),
-			        'code': '2',
-			        'vtime': seekto,
-			        'ctime': today.getTime(),
-			        'jump': p.video_jump
-			    }); 
-			}
-		}
-	});	
-	*/
 	
 	// set volume to 100
 	volumeOn(100, analysisid)
@@ -363,9 +307,15 @@ function onPlayerReady(event)
 	var initial_pos;
 	
 	$( "#socialskip" + analysisid + "_seekbar" ).mousedown(function(e) {
-		var seekpos = document.getElementById("socialskip" + analysisid + "_seekpos"); 
-		initial_pos = seekpos.offsetWidth;
-		mouse = true;
+		var player = players[analysisid];
+		if (player.exp_start) {
+			var seekpos = document.getElementById("socialskip" + analysisid + "_seekpos"); 
+			initial_pos = seekpos.offsetWidth;
+			mouse = true;
+		} else {
+			$("#socialskip" + analysisid + "_seekbarMsg").show();
+			setTimeout(function(){$("#socialskip" + analysisid + "_seekbarMsg").hide();}, 3000);
+		}	
 		  
 	}).mousemove (function(e) {
 		var player = players[analysisid];
@@ -453,17 +403,16 @@ function onPlayerReady(event)
 						seektime = -seektime;
 						player.interactions.push({
 					        'expid': analysisid,
-					        'tester': getCookie("testerId"),
+					        'tester': socialskip_testerId,
 					        'code': '1',
 					        'vtime': Math.round(seekto),
 					        'ctime': today.getTime(),
 					        'jump': Math.round(seektime)
 					    }); 
-						
 					} else {
 						player.interactions.push({
 					        'expid': analysisid,
-					        'tester': getCookie("testerId"),
+					        'tester': socialskip_testerId,
 					        'code': '2',
 					        'vtime': Math.round(seekto),
 					        'ctime': today.getTime(),
@@ -510,7 +459,7 @@ function onPlayerReady(event)
 						seektime = -seektime;
 							player.interactions.push({
 					        'expid': analysisid,
-					        'tester': getCookie("testerId"),
+					        'tester': socialskip_testerId,
 					        'code': '1',
 					        'vtime': Math.round(seekto),
 					        'ctime': today.getTime(),
@@ -520,7 +469,7 @@ function onPlayerReady(event)
 					} else {
 						player.interactions.push({
 					        'expid': analysisid,
-					        'tester': getCookie("testerId"),
+					        'tester': socialskip_testerId,
 					        'code': '2',
 					        'vtime': Math.round(seekto),
 					        'ctime': today.getTime(),
@@ -548,6 +497,7 @@ function onPlayerReady(event)
 			display(analysisid);
 			$("#socialskip" + analysisid + "_startlink").hide("fast"); // The previous link is not available anymore
 			$("#socialskip" + analysisid + "_instructions").hide(); // Hide the instructions
+			$("#socialskip" + analysisid + "_seekbarMsg").hide();
 			player.exp_start = true;
 			
 			setInterval(function(){ 
@@ -563,52 +513,90 @@ function onPlayerReady(event)
 
 	// add style tag in head	
 	$('head').append('<style>#socialskip' + analysisid + '_timebox:before{content:""; position:absolute;top:100%;left: 13px;width: 0px;height: 0;border-top: 5px solid ' + players[analysisid].bcolor + ';border-left: 5px solid transparent;border-right: 5px solid transparent;}</style>');
-	var timebox = { 'background-color': players[analysisid].bcolor, 'color': players[analysisid].icolor, 'margin-top': '-20px', 'height': '12px', 'width': '31px', 'position': 'absolute', 'text-align': 'center', 'padding': '2px', 'font-family': '"Arial", sans-serif', 'font-size':'10px' };
 	
 	
-	/* set colors in elements */
-	
-	$( "#socialskip" + analysisid + "_toolbar").css('background-color', players[analysisid].bcolor);
-	$( "#socialskip" + analysisid + "_toolbar" ).css('width', '600px');
-	
-	$( "#socialskip" + analysisid + "_timebox").css(timebox);
-	$( "#socialskip" + analysisid + "_timebox").hide();
+	$( "#socialskip" + analysisid + "_toolbar").css({
+		'background-color': players[analysisid].bcolor,
+		'width' : '600px', 
+		'border-radius' : '0px'
+	});
 	
 	
-	var circle_seekpos = {'position': 'absolute', 'margin-top': '-5px'};
-	$( "#socialskip" + analysisid + "_circle_seekpos").css(circle_seekpos);
+	$( "#socialskip" + analysisid + "_timebox").css({
+		'background-color' : players[analysisid].bcolor,
+		'color' : players[analysisid].icolor, 
+		'margin-top' : '-20px', 
+		'height' : '12px', 
+		'width' : '31px', 
+		'position' : 'absolute', 
+		'text-align' : 'center', 
+		'padding' : '2px', 
+		'font-family' : '"Arial", sans-serif', 
+		'font-size' : '10px',
+		'border-radius' : '0px',
+		'display' : 'none'
+	});
 	
 	
+	$( "#socialskip" + analysisid + "_options" ).css({
+		'color' : players[analysisid].icolor,
+		'background-color' : players[analysisid].bcolor,
+		'font-size' : '10px',
+		'margin-top' : '-93px',
+		'border-radius' : '0px' 
+	});
+
 	
-	$( "#socialskip" + analysisid + "_options" ).css('color', players[analysisid].icolor);
-	$( "#socialskip" + analysisid + "_options" ).css('background-color', players[analysisid].bcolor);
-	$( "#socialskip" + analysisid + "_options" ).css('font-size', '10px');
+	
+	$( "#socialskip" + analysisid + "_circle_seekpos").css({
+		'position': 'absolute',
+		'margin-top': '-5px'
+	});
+	
 	
 	$( "#socialskip" + analysisid + "_counter" ).css('color', players[analysisid].icolor);
 	
-	$( "#socialskip" + analysisid + "_seekbar" ).css('height', '6px');
-	$( "#socialskip" + analysisid + "_seekbar" ).css('background-color', players[analysisid].icolor);
-	$( "#socialskip" + analysisid + "_seekbar" ).css('margin', '0px');
+	$( "#socialskip" + analysisid + "_seekbar" ).css({
+		'height' : '6px',
+		'background-color' : players[analysisid].icolor,
+		'margin' : '0px',
+		'border-radius' : '0px'
+	});
 	
-	$( ".socialskip" + analysisid + "_options_td" ).css('color', players[analysisid].icolor);
-	$( ".socialskip" + analysisid + "_options_td" ).css('font-size', '12px');
+	$( ".socialskip" + analysisid + "_options_td" ).css({
+		'color' : players[analysisid].icolor,
+		'font-size' : '12px'
+	});
 
-	$( "#socialskip" + analysisid + "_seekpos" ).css('height', '6px');
-	$( "#socialskip" + analysisid + "_seekpos" ).css('width', '0px');
-	$( "#socialskip" + analysisid + "_seekpos" ).css('background-color', players[analysisid].pcolor);
+	$( "#socialskip" + analysisid + "_seekpos" ).css({
+		'height' : '6px',
+		'width' : '0px',
+		'background-color' : players[analysisid].pcolor
+	});
 	
-	if (controls & slide) {
-		$( "#socialskip" + analysisid + "_options" ).css('margin-top', '-93px');
-	} else {
-		$( "#socialskip" + analysisid + "_options" ).css('margin-top', '-86px');
-	}
 	
-	$( "#socialskip" + analysisid + "_volume_seekbar" ).css('height', '4px');
-	$( "#socialskip" + analysisid + "_volume_seekbar" ).css('background-color', players[analysisid].icolor);
+	$( "#socialskip" + analysisid + "_volume_seekbar" ).css({
+		'height' : '4px',
+		'background-color' : players[analysisid].icolor,
+		'border-radius' : '0px'
+	});
 	
-	$( "#socialskip" + analysisid + "_volume_seekpos" ).css('height', '4px');
-	$( "#socialskip" + analysisid + "_volume_seekpos" ).css('width', '60px');
-	$( "#socialskip" + analysisid + "_volume_seekpos" ).css('background-color', players[analysisid].pcolor);
+	
+	$( "#socialskip" + analysisid + "_volume_seekpos" ).css({
+		'height' : '4px',
+		'width' : '60px',
+		'background-color' : players[analysisid].pcolor
+	});
+	
+	 
+	$( "#socialskipplayer" + analysisid).css({ 
+		"-webkit-user-select": "none", 
+		"-khtml-user-select": "none",  
+		"-moz-user-select": "none", 
+		"-o-user-select": "none", 
+		"user-select": "none", 
+		"cursor":"default"
+	});
 	
 	
 	$( "#socialskip" + analysisid + "_240p" ).hide();
@@ -618,9 +606,6 @@ function onPlayerReady(event)
 	$( "#socialskip" + analysisid + "_1080p" ).hide();
 	$( "#socialskip" + analysisid + "_4k" ).hide();
 	
-	var unselectable = { "-webkit-user-select": "none", "-khtml-user-select": "none",  "-moz-user-select": "none", "-o-user-select": "none", "user-select": "none", "cursor":"default" };
-	$( "#socialskipplayer" + analysisid).css(unselectable);
-
 	
 	players[analysisid].addEventListener('onStateChange', function(e) {
 		if ( players[analysisid].getPlayerState() != YT.PlayerState.PLAYING ) { // if player state is playing
@@ -649,7 +634,9 @@ function onPlayerReady(event)
 
 function closePage(analysisid) {
 	var player = players[analysisid];
-	$.post(purl, { data : JSON.stringify(player.interactions)})
+	if ((player.interactions).length > 0) {
+		$.post(purl, { data : JSON.stringify(player.interactions)})
+	}
 }
 
 // This functions drawing play button with canvas
@@ -668,6 +655,31 @@ function drawPlayButton(analysisid) {
 	}
 }
 
+
+//This functions drawing play button with canvas
+function drawReplayButton(analysisid) {
+	var canvas=document.getElementById('socialskip' + analysisid + '_play');
+	if (canvas != null) {
+		var c1 = canvas.getContext("2d");
+		c1.clearRect(0, 0, canvas.width, canvas.height);
+		c1.strokeStyle = players[analysisid].icolor;
+		c1.beginPath();
+		c1.arc(13,10,6,0.4,5.3);
+		c1.lineWidth = 2;
+		c1.stroke();
+
+		c1.fillStyle = players[analysisid].icolor;
+		c1.beginPath();
+		c1.moveTo(19, 3);
+		c1.lineTo(20,9);
+		c1.lineTo(14, 8);
+		c1.closePath();
+		c1.fill();
+	}
+}
+
+
+
 //This functions drawing pause button with canvas
 function drawPauseButton(analysisid) {
 	var canvas=document.getElementById('socialskip' + analysisid + '_play');
@@ -681,53 +693,7 @@ function drawPauseButton(analysisid) {
 		ctx.fillRect(15,4,4,12);
 	}
 }
-/*
-//This functions drawing forward button with canvas
-function drawForwardButton(analysisid) {
-	var c=document.getElementById('socialskip' + analysisid + '_forward');
-	if (c != null) {
-	
-		var context=c.getContext("2d");
-		context.beginPath();
-		context.moveTo(2, 4);
-		context.lineTo(2, 16);
-		context.lineTo(12, 10);
-		context.closePath();
-		context.fillStyle=players[analysisid].icolor;
-		context.fill();
 
-		context.beginPath();
-		context.moveTo(8, 4);
-		context.lineTo(8, 16);
-		context.lineTo(18, 10);
-		context.closePath();
-		context.fillStyle=players[analysisid].icolor;
-		context.fill();
-	}
-}
-
-//This functions drawing backward button with canvas
-function drawBackwardButton(analysisid) {
-	var c=document.getElementById('socialskip' + analysisid + '_backward');
-	if (c != null) {
-		var context=c.getContext("2d");
-		context.moveTo(24, 4);
-		context.lineTo(24, 16);
-		context.lineTo(14, 10);
-		context.closePath();
-		context.fillStyle=players[analysisid].icolor;
-		context.fill();
-
-		context.beginPath();
-		context.moveTo(18, 4);
-		context.lineTo(18, 16);
-		context.lineTo(8, 10);
-		context.closePath();
-		context.fillStyle=players[analysisid].icolor;
-		context.fill();
-	}
-}
-*/
 //This functions drawing options button with canvas
 function drawOptionsButton(analysisid) {
 	var c=document.getElementById("socialskip" + analysisid + "_playbackOptions");
@@ -1064,8 +1030,6 @@ function createMarkup($elem, analysisid, videoinfo) {
 	var html;
 	 
 	var playButtonHtml = '<canvas style="cursor:pointer;" id="socialskip' + analysisid + '_play" width="30" height="18">Play</canvas>';
-	//var forwardButtonHtml = '<canvas style="cursor:pointer;" id="socialskip' + analysisid + '_forward" width="30" height="18">Forward</canvas>';
-	//var backwardButtonHtml = '<canvas style="cursor:pointer;" id="socialskip' + analysisid + '_backward" width="30" height="18">Backward</canvas>';
 	var volumeButtonHtml = '<canvas style="cursor:pointer;" id="socialskip' + analysisid + '_volume" width="30" height="18">Volume</canvas>';
 	var counterHtml = '<td style="display:inline-block;overflow: hidden; white-space: nowrap;font-family:Arial, Sans-serif;font-size:11px" id="socialskip' + analysisid + '_counter"></td>';
 	var playbackOptionsButtonHtml = '<canvas style="cursor:pointer;" id="socialskip' + analysisid + '_playbackOptions" width="30" height="19">Options</canvas>';
@@ -1073,142 +1037,115 @@ function createMarkup($elem, analysisid, videoinfo) {
 	var playbackQualityListHtml = '<tr><td class="socialskip' + analysisid + '_options_td" style="font-size:10px;">Playback quality</td><td><select style="font-size:11px;" id="socialskip' + analysisid + '_playbackQualityList"><option id="socialskip' + analysisid + '_240p" value="240">240p</option><option id="socialskip' + analysisid + '_360p" value="360" selected>360p</option><option id="socialskip' + analysisid + '_480p" value="480">480p</option><option id="socialskip' + analysisid + '_720p" value="720">720p</option><option id="socialskip' + analysisid + '_1080p" value="1080">1080p</option><option id="socialskip' + analysisid + '_4k" value="4K">4K</option></select> </td></tr>';
 	var fullscreenButtonHtml = '<canvas style="cursor:pointer;" id="socialskip' + analysisid + '_fullscreen" width="30" height="18"></canvas>';
 	
-		html = ['<div>'];
-		
-		// toolbar div
-		html.push('<div id="socialskip' + analysisid + '_toolbar" style="margin-top: -6px; padding: 0px 0px 0px 0px;" >');
-		
-		// toolbar table
-		html.push('<table style="width:100%">');
-		
-		//if (controls & slide) {
-		// seekbar
-		html.push('<tr style="padding: 0px;"><td colspan="100%">');
-		html.push('<div id="socialskip' + analysisid + '_timebox"></div>');
-		html.push('<div class="socialskip' + analysisid + '_seekbar" id="socialskip' + analysisid + '_seekbar"><canvas id="socialskip' + analysisid + '_circle_seekpos" width="16" height="16"></canvas><div id="socialskip' + analysisid + '_seekpos"></div></div>');
-		html.push('</td></tr>');
-		
-		html.push('<tr>');
-		
-		// play button
-		if (controls & play) {
-			html.push('<td style="width:25px;overflow: hidden;white-space: nowrap;">');
-			html.push(playButtonHtml);
-			html.push('</td>');
-		} 
-		/* } else {
-			// push empty tr
-			html.push('<tr><td style="min-height:6px;"></td></tr>');
-			
-			html.push('<tr>');
-			
-			// backward button
-			if (controls & backward) {
-				html.push('<td style="width:25px;overflow: hidden;white-space: nowrap;">');
-				html.push(backwardButtonHtml);
-				html.push('</td>');
-			} 
-			
-			// play button
-			if (controls & play) {
-				html.push('<td style="width:25px;overflow: hidden;white-space: nowrap;">');
-				html.push(playButtonHtml);
-				html.push('</td>');
-			} 
-			
-			// forward button
-			if (controls & forward) {
-				html.push('<td style="width:25px;overflow: hidden; white-space: nowrap;">');
-				html.push(forwardButtonHtml);
-				html.push('</td>');
-			} 
-		}
-		*/
-		
-		// volume button
-		if(controls & volume ) {
-			// volume button
-			html.push('<td style="width:30px;overflow: hidden;white-space: nowrap;">');
-			html.push(volumeButtonHtml);	
-			html.push('</td>');
-			// volume seekbar
-			html.push('<td style="display:inline-block;"><div style="cursor:pointer;width:60px;" id="socialskip' + analysisid + '_volume_seekbar"><div id="socialskip' + analysisid + '_volume_seekpos"></div></div></td>');
-		}
-		
-		// counter
-		html.push(counterHtml);
+	html = ['<div>'];
 	
-		// fullscreen button
-		if(controls & fullscreen) {
-			html.push('<td style="float:right;width:30px;">');
-			html.push(fullscreenButtonHtml);
-			html.push('</td>');
+	// toolbar div
+	html.push('<div id="socialskip' + analysisid + '_toolbar" style="margin-top: -6px; padding: 0px 0px 0px 0px;" >');
+	
+	// toolbar table
+	html.push('<table style="width:100%">');
+	
+	//if (controls & slide) {
+	// seekbar
+	html.push('<tr style="padding: 0px;"><td colspan="100%">');
+	html.push('<div id="socialskip' + analysisid + '_timebox"></div>');
+	html.push('<div class="socialskip' + analysisid + '_seekbar" id="socialskip' + analysisid + '_seekbar"><canvas id="socialskip' + analysisid + '_circle_seekpos" width="16" height="16"></canvas><div id="socialskip' + analysisid + '_seekpos"></div></div>');
+	html.push('</td></tr>');
+	
+	html.push('<tr>');
+	
+	// play button
+	if (controls & play) {
+		html.push('<td style="width:25px;overflow: hidden;white-space: nowrap;">');
+		html.push(playButtonHtml);
+		html.push('</td>');
+	} 
+	
+	// volume button
+	if(controls & volume ) {
+		// volume button
+		html.push('<td style="width:30px;overflow: hidden;white-space: nowrap;">');
+		html.push(volumeButtonHtml);	
+		html.push('</td>');
+		// volume seekbar
+		html.push('<td style="display:inline-block;"><div style="cursor:pointer;width:60px;" id="socialskip' + analysisid + '_volume_seekbar"><div id="socialskip' + analysisid + '_volume_seekpos"></div></div></td>');
+	}
+	
+	// counter
+	html.push(counterHtml);
+
+	// fullscreen button
+	if(controls & fullscreen) {
+		html.push('<td style="float:right;width:30px;">');
+		html.push(fullscreenButtonHtml);
+		html.push('</td>');
+	}
+	
+	// options
+	if((controls & quality) ||  (controls & playbackrate)) {
+		// options button
+		html.push('<td style="float:right;width:27px;overflow: hidden;white-space: nowrap;width:30px;">');
+		html.push(playbackOptionsButtonHtml);
+		
+		// options box
+		html.push('<div id="socialskip' + analysisid + '_options" style="font-family:Arial, Sans-serif;min-height:48px;max-height:48px;padding:5px;display:none;margin-left:-135px;position:absolute;z-index:1000;opacity:0.9;">');
+		html.push('<table id="socialskip' + analysisid + '_options_table" >');
+		
+		// playbackrate list
+		if(controls & playbackrate) {
+			html.push(playbackRateListHtml);
 		}
 		
-		// options
-		if((controls & quality) ||  (controls & playbackrate)) {
-			// options button
-			html.push('<td style="float:right;width:27px;overflow: hidden;white-space: nowrap;width:30px;">');
-			html.push(playbackOptionsButtonHtml);
-			
-			// options box
-			html.push('<div id="socialskip' + analysisid + '_options" style="font-family:Arial, Sans-serif;min-height:48px;max-height:48px;padding:5px;display:none;margin-left:-135px;position:absolute;z-index:1000;opacity:0.9;">');
-			html.push('<table id="socialskip' + analysisid + '_options_table" >');
-			
-			// playbackrate list
-			if(controls & playbackrate) {
-				html.push(playbackRateListHtml);
-			}
-			
-			// quality list
-			if(controls & quality) {
-				html.push(playbackQualityListHtml);	
-			}
-			
-			html.push('</table>')
-			html.push('</div>'); // end options box
-			
-			html.push('</td>'); // end option button td
+		// quality list
+		if(controls & quality) {
+			html.push(playbackQualityListHtml);	
 		}
 		
+		html.push('</table>')
+		html.push('</div>'); // end options box
 		
+		html.push('</td>'); // end option button td
+	}
+	
+	
+	
+	html.push('</tr></table>'); // end toolbar table
+	html.push('</div>'); // end toolbar div
+	
+	// if interaction time != 0 OR questionnaire is not empty
+	if (parseInt(((videoinfo[3] & (0xFF << 10)) >>> 10) * 60) != 0 || videoinfo[2] != "") {
+		// show start button
+		html.push('<br><center><a href="#" id="socialskip' + analysisid + '_startlink"><canvas style="cursor:pointer;" id="socialskip' + analysisid + '_startbtn" width="50" height="50">Start</canvas></a></center>');
+		html.push('<center><span id="socialskip' + analysisid + '_seekbarMsg" style="color:#FF0000;display:none;">You must press <b>Start</b> to enable Seekbar.</span></center>');
+	} 
+	
+	// input which shows remain time
+	html.push('<input type="text" size="21" id="socialskip' + analysisid + '_remainTime" style="display:none;">');
+	html.push('</div>');
+	
+	$elem.wrap('<div id="socialskip' + analysisid + '_experiment"><table><tr><td id="socialskip' + analysisid + '_leftpanel" valign="top"></td></tr></table></div>');
+	
+	$elem.after(html.join('\n'));
+	
+	if(videoinfo[4] != "" || videoinfo[2] != "" ) {
+		// create new td rightpanel
+		html = ['<td id="socialskip' + analysisid + '_rightpanel">'];
 		
-		html.push('</tr></table>'); // end toolbar table
-		html.push('</div>'); // end toolbar div
-		
-		// if interaction time != 0 OR questionnaire is not empty
-		if (parseInt(((videoinfo[3] & (0xFF << 10)) >>> 10) * 60) != 0 || videoinfo[2] != "") {
-			// show start button
-			html.push('<br><center><a href="#" id="socialskip' + analysisid + '_startlink"><canvas style="cursor:pointer;" id="socialskip' + analysisid + '_startbtn" width="50" height="50">Start</canvas></a></center>');
+		// instructions iframe
+		if (videoinfo[4]) {
+			html.push('<div id="socialskip' + analysisid + '_instructions"><iframe src="' + videoinfo[4] + '"  width="600" height="500" class="googledoc"></iframe></div>');
 		} 
 		
-		// input which shows remain time
-		html.push('<input type="text" size="18" id="socialskip' + analysisid + '_remainTime" style="display:none;">');
-		html.push('</div>');
-		
-		$elem.wrap('<div id="socialskip' + analysisid + '_experiment"><table><tr><td id="socialskip' + analysisid + '_leftpanel" valign="top"></td></tr></table></div>');
-		
-		$elem.after(html.join('\n'));
-		
-		if(videoinfo[4] != "" || videoinfo[2] != "" ) {
-			// create new td rightpanel
-			html = ['<td id="socialskip' + analysisid + '_rightpanel">'];
-			
-			// instructions iframe
-			if (videoinfo[4]) {
-				html.push('<div id="socialskip' + analysisid + '_instructions"><iframe src="' + videoinfo[4] + '"  width="600" height="500" class="googledoc"></iframe></div>');
-			} 
-			
-			// questionnaire iframe
-			if (videoinfo[2]) {
-				html.push('<div id="socialskip' + analysisid + '_questionnaire" style="display:none;"> <iframe src="' + videoinfo[2] + '" width="600" height="500" frameborder="0" marginheight="0" marginwidth="0" class="googledoc"></iframe></div>');
-			}
-
-			html.push('</td>'); // end rightpanel
-			
-			$elem.parent().after(html.join('\n'));
-
+		// questionnaire iframe
+		if (videoinfo[2]) {
+			html.push('<div id="socialskip' + analysisid + '_questionnaire" style="display:none;"> <iframe src="' + videoinfo[2] + '" width="600" height="500" frameborder="0" marginheight="0" marginwidth="0" class="googledoc"></iframe></div>');
 		}
+
+		html.push('</td>'); // end rightpanel
+		
+		$elem.parent().after(html.join('\n'));
+
+	}
 
 }
 
@@ -1228,7 +1165,7 @@ function playpause(analysisid) {
 		if (player.exp_start) {
 			player.interactions.push({
 		        'expid': analysisid,
-		        'tester': getCookie("testerId"),
+		        'tester': socialskip_testerId,
 		        'code': '3',
 		        'vtime': Math.round(time),
 		        'ctime': today.getTime(),
@@ -1241,7 +1178,7 @@ function playpause(analysisid) {
 		if (player.exp_start) {
 			player.interactions.push({
 		        'expid': analysisid,
-		        'tester': getCookie("testerId"),
+		        'tester': socialskip_testerId,
 		        'code': '4',
 		        'vtime': Math.round(time),
 		        'ctime': today.getTime(),
@@ -1268,7 +1205,7 @@ function seek(eid, dist, origin) {
 	} else if (newpos >= p.video_endTime) {
 		newpos = p.video_endTime - 0.5;
 		p.pauseVideo();
-		drawPlayButton(eid)
+		drawReplayButton(eid);
 		p.state_ended = true;
 	}
 	
@@ -1277,12 +1214,13 @@ function seek(eid, dist, origin) {
 }
 
 
-//This function converts seconds to minutes 
+//This function converts seconds to minutes or hours
 function toTime(secs) { 
 	var t = new Date(0,0,0);
 	t.setSeconds(secs);
-
-	return t.toTimeString().substr(3,5);
+	if (secs <= 3600)
+		return t.toTimeString().substr(3,5);
+	else return t.toTimeString().substr(0,8)
 }
 
 
@@ -1324,8 +1262,9 @@ function updatePlayersInfo() {
 				
 				if (cur >= p.video_endTime) {
 					p.pauseVideo();
-					drawPlayButton(x)
+					drawReplayButton(x)
 					p.state_ended = true;
+					p.seekTo(p.video_endTime, true);
 				}
 				
 				var counter = toTime(curtime) + '/' + toTime(p.video_endTime - p.video_startTime);
@@ -1350,37 +1289,33 @@ function onYouTubePlayerAPIReady() {
 	checkCookie();
 	$('[data-socialskip]').each(function () {
 		var $elem = $(this);
+		$elem.html("<br><br><center><img src=\"http://www.socialskip.org/images/loading.gif\"><br><br><span style=\"font-size:16px;font-family:Arial, serif;color:#111111;\">Please wait while loading the video...</span><center>")
 		var analysisid = $elem.attr('data-expid');
-		
 		$.getJSON(url, { expid : analysisid }, function (data) {
-			if ('string' == typeof(data)) {
-				$.getJSON(url, { expid : analysisid }, function (data) {
-					if ('string' == typeof(data)) {
-						alert('Error retrieving video info.');
-					} else {
-						alert("2")
-						createPlayer($elem, analysisid, data);
-					}
-				});
+			if ('string' == typeof(data) || data.length == 0) {
+				alert('Error retrieving video info.');
 			} else {
 				createPlayer($elem, analysisid, data);
-			}		
+			}
 		});
 	});
 }
 
 
-// function for the remain timer
+// function for update the remain timer 
 function display(analysisid) { 
 	var player = players[analysisid];
 
 	player.video_interactionTime -= 1; 
-
+	
+	// if interaction time has finished
 	if (player.video_interactionTime<=-1) { 
 		player.video_interactionTime += 1; 
 		player.stopVideo();
 		player.clearVideo();
 		$("#socialskip" + analysisid + "_toolbar").hide();
+		
+		// if isset interactions save in database
 		if ((player.interactions).length > 0) {
 			$.post(purl, { data : JSON.stringify(player.interactions)});
 		}
@@ -1415,19 +1350,16 @@ function setCookie(c_name, value, exdays) {
 
 function checkCookie() {
 	var testerId = getCookie("testerId");
-	if (testerId != null && testerId != "") {
-		$(".testerIdtext").val(testerId);
-	} else {
+	if (testerId == null || testerId == "") {
 		$.post("/cookies", function (data) {
-			testerId = data;
-			$(".testerIdtext").val(testerId);
-			if (testerId != null && testerId != "") {
-				setCookie("testerId", testerId, 100);
+			if (data != null && data != "") {
+				socialskip_testerId = data;
+				setCookie("testerId", data, 100);
+			} else {
+				socialskip_testerId = Math.floor((Math.random() * 999) + 1);
 			}
 		}, "text");
+	} else {
+		socialskip_testerId = testerId;
 	}
 }
-
-
-
-
