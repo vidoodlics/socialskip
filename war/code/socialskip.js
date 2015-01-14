@@ -371,11 +371,6 @@ function onPlayerReady(event)
 				
 				moveSeekBar(analysisid, e);
 				
-				if(player.state_ended) {
-					player.playVideo();
-					player.state_ended = false;
-				}
-				
 				if (seekbar != null && seekpos != null) {
 		
 					var element = seekbar;
@@ -438,11 +433,6 @@ function onPlayerReady(event)
 				var today = new Date(); // Get the current time
 				
 				moveSeekBar(analysisid, e);
-				
-				if(player.state_ended) {
-					player.playVideo();
-					player.state_ended = false;
-				}
 				
 				if (seekbar != null && seekpos != null) {
 		
@@ -608,16 +598,18 @@ function onPlayerReady(event)
 	
 	
 	players[analysisid].addEventListener('onStateChange', function(e) {
-		if ( players[analysisid].getPlayerState() != YT.PlayerState.PLAYING ) { // if player state is playing
-			// draw pause button			
-			drawPlayButton(analysisid)
-			
-		} else { // if player state is paused or cued
-			// draw play button
-			drawPauseButton(analysisid);
+		if(!players[analysisid].state_ended) {
+			if (players[analysisid].getPlayerState() != YT.PlayerState.PLAYING ) { // if player state is playing
+				// draw pause button			
+				drawPlayButton(analysisid)
+				
+			} else { // if player state is paused or cued
+				// draw play button
+				drawPauseButton(analysisid);
+			}
 		}
     });
-	
+
 	
 	event.target.video_ready = true;	
 	
@@ -845,7 +837,15 @@ function moveSeekBar(analysisid, e) {
 		$( "#socialskip" + analysisid + "_circle_seekpos" ).css('margin-left', clickX);
 		
 		var seekto = clickX / barWidth * (player.video_endTime - player.video_startTime);
-		seek(analysisid, seekto + player.video_startTime, SEEK_START);
+		
+		if (player.state_ended) {
+			player.state_ended = false;
+			player.seekTo(seekto + player.video_startTime);
+			player.playVideo();
+			drawPauseButton(analysisid);
+		} else {
+			seek(analysisid, seekto + player.video_startTime, SEEK_START);
+		}
 		$("#socialskip" + analysisid + "_timebox").text(toTime(seekto));
 	}
 }
@@ -1157,11 +1157,17 @@ function playpause(analysisid) {
 	var today = new Date(); // Get the current time
 	
 	// if state is paused, ended or pause
-	if (player.getPlayerState() == YT.PlayerState.PAUSED || player.getPlayerState() == YT.PlayerState.ENDED || player.getPlayerState() == YT.PlayerState.CUED) { 
-		player.playVideo(); // Play video
-		if (time >= player.video_endTime) {
-			seek(analysisid,  player.video_startTime, SEEK_START); // Go to the beginning of the video
+	if (!(player.getPlayerState() == YT.PlayerState.PLAYING)) { 
+		
+		//player.playVideo(); // Play video
+		
+		if (player.state_ended) {
+			player.seekTo(player.video_startTime, true);	
+			player.state_ended = false;
 		}
+		
+		player.playVideo(); // Play video
+		
 		if (player.exp_start) {
 			player.interactions.push({
 		        'expid': analysisid,
@@ -1201,15 +1207,15 @@ function seek(eid, dist, origin) {
 	newpos += dist;
 	if (newpos < p.video_startTime) {
 		newpos = p.video_startTime;
-		
 	} else if (newpos >= p.video_endTime) {
-		newpos = p.video_endTime - 0.5;
+		newpos = p.video_endTime;
 		p.pauseVideo();
 		drawReplayButton(eid);
 		p.state_ended = true;
 	}
 	
 	p.seekTo(newpos, true);	
+
 	updatePlayersInfo();
 }
 
@@ -1262,7 +1268,7 @@ function updatePlayersInfo() {
 				
 				if (cur >= p.video_endTime) {
 					p.pauseVideo();
-					drawReplayButton(x)
+					drawReplayButton(x);
 					p.state_ended = true;
 					p.seekTo(p.video_endTime, true);
 				}
@@ -1272,7 +1278,6 @@ function updatePlayersInfo() {
 				drawSeekBar(curtime/total, x);
 				
 				$("#socialskip" + p.video_id + "_counter").text(counter);
-
 			}
 		}
 	}
