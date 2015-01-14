@@ -107,11 +107,7 @@
 			<p>Please try again later.</p>
   		</div>
   		
-  		<div data-role="footer" data-position="fixed">
-			<div class="responsive">
-				<a href="/welcome" rel="external" data-ajax="false" data-role="button">socialskip.appspot.com</a>
-			</div>
-		</div>
+  		<%@include file="footer.jsp" %> 
 	</div>
 
 </body>

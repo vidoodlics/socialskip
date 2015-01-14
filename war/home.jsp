@@ -20,8 +20,8 @@
 	<meta property="og:type" content="website" />
 	<meta property="og:description" content="SocialSkip can be employed in real or experimental scenarios to generate user activity graphs of an online video, by analyzing users’ interactions with the system, such as play, pause, skip/scrub.The SocialSkip system employs a custom web-video player and a web-database to keep a record of basic user actions (play, pause, and skip)." />
 	
-	<meta name="description" content="SocialSkip can be employed in real or experimental scenarios to generate user activity graphs of an online video, by analyzing users’ interactions with the system, such as play, pause, skip/scrub.The SocialSkip system employs a custom web-video player and a web-database to keep a record of basic user actions (play, pause, and skip)." />
-	<meta name="keywords" content="socialskip.org,socialskip,video,analytics,video for learning,user activity,interactions,custom player,appengine,ionian university,ιόνιο πανεπιστήμιο">
+	<meta name="description" content="SocialSkip can be employed in real or experimental scenarios to generate user activity graphs of an online video, by analyzing users’ interactions with the system, such as play, pause, skip/scrub.The SocialSkip system employs a custom youtube video player and a web-database to keep a record of basic user actions." />
+	<meta name="keywords" content="socialskip.org,socialskip,video learning analytics,custom youtube player,appengine,open source,ionian university,ιόνιο πανεπιστήμιο">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" type="text/css" href="/css/responsive.css" />
 	<link rel="stylesheet" type="text/css" href="/css/home.css" />
@@ -61,37 +61,8 @@
 <body>
 
 <div data-role="page" data-theme="a" id="homePage">
-	<div data-role="header" data-tap-toggle="false" data-position="fixed">
-		<div class="responsive">
-			<a href="http://www.socialskip.org/home" data-icon="home" rel="external" data-ajax="false" data-role="button">SocialSkip</a>
-			<% 
-			boolean isResearcher = false;
-			try {
-			isResearcher = UserInfo.isResearcher(UserInfo.getMail());
-			if(!isResearcher) { %>
-			 	<a href="#add-form" data-icon="action" rel="external" data-ajax="false" data-role="button" style="float:right;">Sign up</a>
-				<a href="<%=login%>" data-icon="lock" rel="external" data-ajax="false" data-role="button" style="float:right;">Login</a>
-			<% } else {%>
-				<div id="dd" class="wrapper-dropdown-5" tabindex="1" style="float:right;"><a data-icon="user" data-role="button" style="float:right;"><%=UserInfo.getNickname()%><span class="responhide">@gmail.com</span></a>
-					<ul class="dropdown">
-						<%
-						  if( UserInfo.isAdministrator()) {
-						%>
-						<li><a href="/experiments" rel="external" data-ajax="false">Admin panel</a></li>
-						<%
-						  }
-						%>
-						<li><a href="/researcher" rel="external" data-ajax="false">Researcher panel</a></li>
-						<li><a href="<%=logout%>" rel="external" data-ajax="false">Log out</a></li>
-					</ul>
-				</div>			
-			<% } 
-			} catch (Exception e) {
-				response.sendRedirect("/error.jsp"); 
-			}
-			%>
-		</div>
-	</div>	
+	
+	<%@include file="header.jsp" %>	
 	
 	<div data-role="content" id="carousel">
 		<div class="responsive">
@@ -179,7 +150,7 @@
 			<h2>Partner Organizations</h2>
 			<div class="responsive">
 				<div class="ui-grid-a">
-	                <div class="ui-block-a"">
+	                <div class="ui-block-a">
 	                	<div>
 		                	<p><a style="text-decoration:none" href="http://crtc.wm.edu/" target="_blank"><img alt="Center for Real-time Computing" src="http://www.spl.harvard.edu/SPLWeb/images/1/12/Logo_CRTC.png"></a></p>
 							<p><a style="text-decoration:none" href="http://crtc.wm.edu/" target="_blank">Center for<br>Real-time Computing</a></p>
@@ -196,14 +167,7 @@
 		</div>
 	</div>
 	
-	<div data-role="footer" id="footer">
-		<div class="responsive">
-			 <div class="ui-grid-a" style="margin:16px;">
-                <div class="ui-block-a" style="text-align: left;">SocialSkip is maintained by <a style="text-decoration:none" href="https://github.com/vidoodlics" target="_blank">vidoodlics</a></div>
-                <div class="ui-block-b" style="text-align: right;">Github: <a style="text-decoration:none" href="http://vidoodlics.github.io/socialskip/" target="_blank">Page</a>, <a style="text-decoration:none" href="https://github.com/vidoodlics/socialskip" target="_blank">Source</a>, <a style="text-decoration:none" href="https://github.com/vidoodlics/socialskip/issues" target="_blank">Issues</a></div>                
-            </div>
-		</div>
-	</div>
+	<%@include file="footer.jsp" %>
 	
 	<!-- ///////////// -->
 	

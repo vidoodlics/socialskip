@@ -7,6 +7,7 @@
 <%@ page import="socialskip.WelcomeServlet" %>
 
 <% 
+	String login = WelcomeServlet.getLoginUrl();
 	String logout = WelcomeServlet.getLogoutUrl();
 	String mail = UserInfo.getMail();
 
@@ -49,18 +50,8 @@
 
 <body>
 	<div data-role="page" data-theme="a">
-		<div data-role="header" data-tap-toggle="false" data-position="fixed">
-			<div class="responsive">
-				<a href="/home" data-icon="home" rel="external" data-ajax="false" data-role="button">SocialSkip</a>
-				<div id="dd" class="wrapper-dropdown-5" tabindex="1" style="float:right;"><a data-icon="user" data-role="button" style="float:right;"><%=UserInfo.getNickname()%><span class="responhide">@gmail.com</span></a>
-					<ul class="dropdown">
-						<li><a href="/experiments" rel="external" data-ajax="false">Admin panel</a></li>
-						<li><a href="/researcher" rel="external" data-ajax="false">Researcher panel</a></li>
-						<li><a href="<%=logout%>" rel="external" data-ajax="false">Log out</a></li>
-					</ul>
-				</div>
-			</div>
-		</div>
+		
+		<%@include file="header.jsp" %>
 
 		<div data-role="content" data-theme="b" class="responsive">
 			<br/>
@@ -86,7 +77,8 @@
 				</ul>
 			</div>
 		</div>
-		<br/><br><br>
+		<br/><br>
+		<%@include file="footer.jsp" %>
 	</div>
 	
 </body>

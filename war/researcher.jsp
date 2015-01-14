@@ -48,6 +48,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" type="text/css" href="/css/responsive.css" />
+	<link rel="stylesheet" type="text/css" href="/css/allpages.css" />
 	<link rel="stylesheet" type="text/css" href="/css/dropdownmenu/ddm.css" />
 	
 	<title>SocialSkip - Researcher (<%= mail %>)</title>
@@ -66,91 +67,75 @@
 	<script src="/code/googleanalytics.js" type="text/javascript"></script> 
 </head>
 
-<body >
+<body>
 	
 	<div data-role="page" id="researchersPage" data-theme="a">
-	
-	<div data-role="header" data-tap-toggle="false" data-position="fixed">
+		
+		<%@include file="header.jsp" %>
+		
+		   
+		<div data-role="content" data-theme="a">
 		<div class="responsive">
-			<a href="/home" data-icon="home" rel="external" data-ajax="false" data-role="button">SocialSkip</a>      
-			<div id="dd" class="wrapper-dropdown-5" tabindex="1" style="float:right;"><a data-icon="user" data-role="button" style="float:right;"><%=UserInfo.getNickname()%><span class="responhide">@gmail.com</span></a>
-				<ul class="dropdown">
-					<%
-					  if( UserInfo.isAdministrator()) {
-					%>
-					<li><a href="/experiments" rel="external" data-ajax="false">Admin panel</a></li>
-					<%
-					  }
-					%>
-					<li><a href="/researcher" rel="external" data-ajax="false">Researcher panel</a></li>
-					<li><a href="<%=logout%>" rel="external" data-ajax="false">Log out</a></li>
-				</ul>
-			</div>
-		</div>
-	</div>
+		<br><br>
+		<div id="experiments">
+		<% 
+			String col = "false"; 	
+			for (Iterator<String[]> rows = tables.getRowsIterator(); rows.hasNext(); ) { 
+							String[] rowValues = rows.next();
+							
+		%>
+			
+	   		<div data-role="collapsible" data-theme="b" data-collapsed="<%= col %>" data-mini="true" id="<%=rowValues[0]%>" >
+	        <h2><%= rowValues[2] %></h2>
 	
-	    
-	
-	<div data-role="content" data-theme="a">
-	<div class="responsive">
-	<br><br>
-	<div id="experiments">
-	<% 
-		String col = "false"; 	
-		for (Iterator<String[]> rows = tables.getRowsIterator(); rows.hasNext(); ) { 
-						String[] rowValues = rows.next();
+	        <table id="exptable" style="margin:auto;">
+					<tr>
+					<td class="hidden"><%= rowValues[2] %></td>
+						<td class="hidden"><%= rowValues[0] %></td>
+						<td class="hidden"><%= rowValues[1] %></td>
+						<td class="hidden"><%= rowValues[3] %></td>
+						<td class="hidden"><%= rowValues[4] %></td>
+						<td class="hidden"><%= rowValues[5] %></td>
+						<td class="hidden"><%= rowValues[6] %></td>
+						<td class="hidden"><%= rowValues[7] %></td>
+						<td class="hidden"><%= rowValues[8] %></td>
+						<td class="hidden"><%= rowValues[9] %></td>
 						
-	%>
-		
-   		<div data-role="collapsible" data-theme="b" data-collapsed="<%= col %>" data-mini="true" id="<%=rowValues[0]%>" >
-        <h2><%= rowValues[2] %></h2>
-
-        <table id="exptable" style="margin:auto;">
-				<tr>
-				<td class="hidden"><%= rowValues[2] %></td>
-					<td class="hidden"><%= rowValues[0] %></td>
-					<td class="hidden"><%= rowValues[1] %></td>
-					<td class="hidden"><%= rowValues[3] %></td>
-					<td class="hidden"><%= rowValues[4] %></td>
-					<td class="hidden"><%= rowValues[5] %></td>
-					<td class="hidden"><%= rowValues[6] %></td>
-					<td class="hidden"><%= rowValues[7] %></td>
-					<td class="hidden"><%= rowValues[8] %></td>
-					<td class="hidden"><%= rowValues[9] %></td>
-					
-				<td class="videohide" style="margin-right:5px">
-					<iframe class="youtube-player" type="text/html" width="416" height="259"
-  						src="<%=rowValues[1]%>?html5=1&theme=light&color=red"
-  						frameborder="0"></iframe>
-				</td>
-				<td style="min-width:10px;"></td>
-				<td><input type="button" value="Edit" data-icon="edit" class="edit" data-theme="b" data-mini="true" />
-					<input type="button" value="Charts" data-icon="eye" class="charts" data-theme="b" data-mini="true" />
-					<input type="button" value="Get URL" data-icon="bullets" class="geturl" data-theme="b" data-mini="true" />
-					<input type="button" value="Embed" data-icon="carat-r" class="getcode" data-theme="b" data-mini="true" />
-					<input type="button" value="Download data" data-icon="arrow-d" class="download" data-theme="b" data-mini="true" />
-					<input type="button" value="Delete" data-icon="delete" class="delete" data-theme="b" data-mini="true" />
-				</td>
-				</tr>
-		</table>
-        
-    	</div>
-		
-    
-    
-    <%
-    		col = "true";
-		}
-	%>
-	</div>
-
-    <br><br>
-    <div style="margin:auto;max-width:220px;">
-    <input type="button" class="newexp" value="Create new experiment" onclick="insert();" data-mini="true" data-theme="b"/>
-    </div>
-    </div>
-	</div>
+					<td class="videohide" style="margin-right:5px">
+						<iframe class="youtube-player" type="text/html" width="416" height="259"
+	  						src="<%=rowValues[1]%>?html5=1&theme=light&color=red"
+	  						frameborder="0"></iframe>
+					</td>
+					<td style="min-width:10px;"></td>
+					<td><input type="button" value="Edit" data-icon="edit" class="edit" data-theme="b" data-mini="true" />
+						<input type="button" value="Charts" data-icon="eye" class="charts" data-theme="b" data-mini="true" />
+						<input type="button" value="Get URL" data-icon="bullets" class="geturl" data-theme="b" data-mini="true" />
+						<input type="button" value="Embed" data-icon="carat-r" class="getcode" data-theme="b" data-mini="true" />
+						<input type="button" value="Download data" data-icon="arrow-d" class="download" data-theme="b" data-mini="true" />
+						<input type="button" value="Delete" data-icon="delete" class="delete" data-theme="b" data-mini="true" />
+					</td>
+					</tr>
+			</table>
+	        
+	    	</div>
+			
+	    
+	    
+	    <%
+	    		col = "true";
+			}
+		%>
+		</div>
 	
+	    <br><br>
+	    <div style="margin:auto;max-width:220px;">
+	    <input type="button" class="newexp" value="Create new experiment" onclick="insert();" data-mini="true" data-theme="b"/>
+	    </div>
+	    </div>
+		</div>
+		
+		<%@include file="footer.jsp" %> 
+		
 	</div>
 	
 	<div data-role="dialog" id="codeinfo" data-theme="b" data-close-btn="right">
