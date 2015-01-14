@@ -69,7 +69,7 @@ To do this, click on *Add Library* button, select *JRE System Library* and in th
 ### Creating Fusion Tables
 
 To create fusion tables, visit http://tables.googlelabs.com and sign in using your Google account.
-Click on *Create a Fusion Table* and the new window click on *Create empty table*. The creation is very simple. You can add or modify columns clicking *Edit* -> *Add column* or *Edit* -> *Change columns*, respectively. 
+Click on *Create a Fusion Table* and in the new window click on *Create empty table*. The creation is very simple. You can add or modify columns by clicking *Edit* -> *Add column* or *Edit* -> *Change columns*, respectively. 
 
 You must be create the following tables.
 
@@ -122,6 +122,13 @@ Add the following rows in the Transactions table.
 |Time			|   Number	|
 |SkipTime		|   Number	|
 
+**Access Tokens**
+
+|Column Name	|	Type	|
+|---------------|-----------|
+|ResearcherId	|	Number	|
+|AccessToken	|   Text	|
+
 
 The next table is a join table that represents a many-to-one relationship between *Interactions* and *Transactions* tables.
 Go to *Interactions* table  and select *File* -> *Merge*, in the next tab select the *Transactions* table.
@@ -129,35 +136,26 @@ In the *This table* drop down list select *TransactionId* and select *Id* of the
 In the new tab, select all and click on *Merge*.
 
 
-The next and final table is a view of the *Interactions* Table.
-Go to *Interactions* table and click on *File* -> *Create view*. In the form opened keep selected only *VideoId*, *TransactionId*, *Time*, and *SkipTime* and click *Create*.
-In the View table go to *File* -> *Share* -> *Change...* and select *Anyone with the link*.
-
-
-Get the Ids from *Researchers*, *Interactions*, *Experiments* and *Merge of Interactions and Transactions* tables. To get the IDs, open table and click *File* -> *About*. Then put IDs in *src/FusionApi.java* file. See the comments in the file and the code below.
+Copy the Ids from *Researchers*, *Interactions*, *Experiments*, *Merge of Interactions and Transactions* and *Access Tokens* tables and put them in the *src/FusionApi.java* file. To copy the IDs, open the table and select *File* -> *About this table*. See the comments in the file and the code below.
 
 ```
 public static final String RESEARCHERS = "**********";  // Researchers table ID
 public static final String EXPERIMENTS = "**********";  // Experiments table ID
 public static final String INTERACTIONS = "**********"; // Interactions table ID
 public static final String DOWNLOAD = "**********";  // Merge of Interactions and Transactions
+public static final String ACCESS_TOKENS = "**********";    // Access Tokens
 ```
 
-And a few lines below in this file, enter your gmail and your password.
+A few lines below in the same file, enter your gmail and your password.
 ```
 private static final String email = "**************@gmail.com"; // Enter your gmail
 private static final String password = "**********"; // Enter password from your gmail
 ```
 
-The ID of *View* table insert in first line of the *war/code/charts.js* file.
-```
-var chartdata = '************' // Id of Fusion Table containing the data for the chart
-```
 
+### Create a Google API key
 
-### Create an Google API key
-
-Visit https://code.google.com/apis/console. Click on *Create project* and the page opened click *Enable an API*. In the next page set *ON* the *Fusion Tables API*. Then click on *Credentials* and in *Public API access* click *Create new key* -> *Server key* -> *Create* and copy the *API key* and paste into *src/FusionApi.java* file.
+Go to https://code.google.com/apis/console. Click on *Create project* and in the page that was opened click *Enable an API*. In the next page, change the *Fusion Tables API* to *ON*. In the sequel click on *Credentials* and in *Public API access* click *Create new key* -> *Server key* -> *Create* and then copy the *API key* and paste it in the *src/FusionApi.java* file.
 ```
 public static final String APIkey = "********************"; // API key
 ```
@@ -167,7 +165,7 @@ public static final String APIkey = "********************"; // API key
 
 Visit [https://www.google.com/recaptcha](https://www.google.com/recaptcha). Click on *Get reCaptcha*, then *Sign up Now*. Type your domain in *Domain* and click *Create*. Go to *My account* and open your site.
 
-Copy the *Private key* and paste in file src/socialskip/CheckCaptcha.java
+Copy the *Private key* and paste it in the src/socialskip/CheckCaptcha.java file.
 ```
 String privateKey = "************************";
 ```
@@ -187,7 +185,7 @@ Copy the *Public Key* and paste in file war/home.jsp
 
 ### Creating App Engine Application
 
-Visit https://appengine.google.com, sign in with your google account and create an application. If this is your first time creating applications on App Engine, will ask you to verify your account. When complete account verification, click *Create Application* and fill with name the *Application Identifier* field and optionally the *Application Title* field and click on *Create Application*.
+Go to https://appengine.google.com, sign in with your google account and create an application. If this is your first time creating applications on App Engine, you may be asked to verify your account. When complete account verification, click *Create Application* and enter the address you want in *Application Identifier* and optionally enter *Application Title* and click on *Create Application* button.
 
 Enter your Application Identifier in the following files.
 

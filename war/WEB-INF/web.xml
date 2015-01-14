@@ -26,6 +26,31 @@
     <url-pattern>/welcome</url-pattern>
   </servlet-mapping>
   
+    <servlet>
+    <servlet-name>api_v1</servlet-name>
+    <servlet-class>socialskip.SocialSkipAPIv1</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>api_v1</servlet-name>
+    <url-pattern>/api/v1/interactions/experiment/*</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>api_v1</servlet-name>
+    <url-pattern>/api/v1/interactions/video/*</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>api_v1</servlet-name>
+    <url-pattern>/api/v1/timeseries/experiment/*</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>api_v1</servlet-name>
+    <url-pattern>/api/v1/timeseries/video/*</url-pattern>
+  </servlet-mapping>
+  
   <servlet>
     <servlet-name>sign_up</servlet-name>
     <servlet-class>socialskip.SignUpServlet</servlet-class>

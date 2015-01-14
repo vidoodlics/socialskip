@@ -38,6 +38,7 @@ public class FusionApi {
 	public static final String EXPERIMENTS = "***************"; // Experiments table ID
 	public static final String INTERACTIONS = "***************"; // Interactions table ID
 	public static final String DOWNLOAD = "***************";    // Merge of Interactions and Transactions
+	public static final String ACCESS_TOKENS = "***************";    // Access Tokens
 	
 	public static final String APIkey = "***************"; // API key
 	
