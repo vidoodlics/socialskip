@@ -2,21 +2,14 @@
 <%@ page import="java.util.Iterator" %>
 <%@ page import="socialskip.UserInfo" %>
 <%@ page import="socialskip.FusionApi" %>
-<%@ page import="socialskip.WelcomeServlet" %>
-
 
 <% 
-
-	String login = WelcomeServlet.getLoginUrl(); 
-	String logout = WelcomeServlet.getLogoutUrl();
-
-	// user signs in with his google account 
-    FusionApi tables = new FusionApi();
 	String mail = UserInfo.getMail();
 	
-	
+	FusionApi tables = new FusionApi();	
+
 	if (mail.isEmpty() || mail == null || mail.equals("")) {
-		response.sendRedirect(login);
+		response.sendRedirect(WelcomeServlet.getLoginUrl());
 	}
 
 	String user = "";
@@ -25,20 +18,7 @@
 		if (!(UserInfo.isResearcher(mail))) {
 			response.sendRedirect("/error.jsp?reason=noreseacher"); 
 		}
-		
-		user = UserInfo.getResearcherID();
 	} catch (Exception e) {
-		response.sendRedirect("/error.jsp");
-	}
-	
-	if(user.isEmpty() || user == null) {
-			response.sendRedirect("/error.jsp");
-	}
-	
-	// Look for researcher videos
-	try {
-		tables.run("SELECT ROWID, VideoURL, Title, Controls, Questionnaire, Info, TimeRange, IconColor, PgsColor, BgColor FROM " + FusionApi.EXPERIMENTS + " WHERE ResearcherId='" + user + "'");
-	} catch(Exception e) {
 		response.sendRedirect("/error.jsp");
 	}
 %>

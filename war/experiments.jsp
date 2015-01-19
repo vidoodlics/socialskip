@@ -4,11 +4,8 @@
 <%@ page import="java.util.Iterator"%>
 <%@ page import="socialskip.FusionApi"%>
 <%@ page import="socialskip.UserInfo" %>
-<%@ page import="socialskip.WelcomeServlet" %>
 
 <% 
-	String login = WelcomeServlet.getLoginUrl();
-	String logout = WelcomeServlet.getLogoutUrl();
 	String mail = UserInfo.getMail();
 
 	//	if user is not admin redirect		

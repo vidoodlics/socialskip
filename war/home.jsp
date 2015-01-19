@@ -1,10 +1,4 @@
 ﻿<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="socialskip.UserInfo" %>
-<%@ page import="socialskip.WelcomeServlet" %>
-<% 
-	String login = WelcomeServlet.getLoginUrl(); 
-	String logout = WelcomeServlet.getLogoutUrl();
-%>
 
 <!DOCTYPE html>
 <html>
@@ -36,7 +30,6 @@
 	<script src="css/owl-carousel/owl.carousel.min.js"></script>
 	<script src="/code/responsive.js" type="text/javascript"></script> 
 	<script src="/css/dropdownmenu/ddm.js" type="text/javascript"></script> 
-	<script src="/code/googleanalytics.js" type="text/javascript"></script> 
 	<script>
 	$(document).ready(function() {
 	 	$("#owl-demo").owlCarousel({

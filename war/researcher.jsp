@@ -2,13 +2,9 @@
 <%@ page import="java.util.Iterator" %>
 <%@ page import="socialskip.UserInfo" %>
 <%@ page import="socialskip.FusionApi" %>
-<%@ page import="socialskip.WelcomeServlet" %>
-
 
 <% 
-
-	String login = WelcomeServlet.getLoginUrl(); 
-	String logout = WelcomeServlet.getLogoutUrl();
+	String login1 = WelcomeServlet.getLoginUrl(); 
 
 	// user signs in with his google account 
     FusionApi tables = new FusionApi();
@@ -16,7 +12,7 @@
 	
 	
 	if (mail.isEmpty() || mail == null || mail.equals("")) {
-		response.sendRedirect(login);
+		response.sendRedirect(login1);
 	}
 
 	String user = "";
@@ -146,7 +142,7 @@
 			Copy the following lines just before in the <code>&lt;/head&gt;</code> tag.
 <textarea>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="http://<%=WelcomeServlet.getAppId()%>.appspot.com/code/socialskip.js" type="text/javascript"></script>
+<script src="http://www.socialskip.org/code/socialskip.min.js" type="text/javascript"></script>
 </textarea>
 			Also copy the following line in the body.
 			<textarea id="codearea"></textarea>
