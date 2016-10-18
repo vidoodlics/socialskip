@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+	<filter>
+		<filter-name>UrlRewriteFilter</filter-name>
+		<filter-class>org.tuckey.web.filters.urlrewrite.UrlRewriteFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>UrlRewriteFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>FORWARD</dispatcher>
+	</filter-mapping>
+
+	<!-- Servlets -->
+	<servlet>
+		<servlet-name>welcome</servlet-name>
+		<servlet-class>socialskip.WelcomeServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>welcome</servlet-name>
+		<url-pattern>/welcome</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>api_v1</servlet-name>
+		<servlet-class>socialskip.SocialSkipAPIv1</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>api_v1</servlet-name>
+		<url-pattern>/api/v1/interactions/experiment/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>api_v1</servlet-name>
+		<url-pattern>/api/v1/interactions/video/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>api_v1</servlet-name>
+		<url-pattern>/api/v1/timeseries/experiment/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>api_v1</servlet-name>
+		<url-pattern>/api/v1/timeseries/video/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>generate_token</servlet-name>
+		<servlet-class>socialskip.GenerateAccessTokenServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>generate_token</servlet-name>
+		<url-pattern>/get-access-token</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>charts_data</servlet-name>
+		<servlet-class>socialskip.ChartsDataServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>charts_data</servlet-name>
+		<url-pattern>/chart_data</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>interaction</servlet-name>
+		<servlet-class>socialskip.InteractionsServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>interaction</servlet-name>
+		<url-pattern>/interactions</url-pattern>
+	</servlet-mapping>
+
+
+	<servlet>
+		<servlet-name>researcher</servlet-name>
+		<servlet-class>socialskip.ResearcherVideosServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>researcher</servlet-name>
+		<url-pattern>/researcher_videos</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>export_data</servlet-name>
+		<servlet-class>socialskip.ExportDataServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>export_data</servlet-name>
+		<url-pattern>/download</url-pattern>
+	</servlet-mapping>
+
+
+	<servlet>
+		<servlet-name>sign_up</servlet-name>
+		<servlet-class>socialskip.SignUpServlet</servlet-class>
+	</servlet>
+
+
+	<servlet-mapping>
+		<servlet-name>sign_up</servlet-name>
+		<url-pattern>/sign_up</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>testerIdCookies</servlet-name>
+		<servlet-class>socialskip.GenerateIdServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>testerIdCookies</servlet-name>
+		<url-pattern>/cookies</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>statistics</servlet-name>
+		<servlet-class>socialskip.StatisticsServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>statistics</servlet-name>
+		<url-pattern>/statistics</url-pattern>
+	</servlet-mapping>
+
+	<!-- jsp hide -->
+
+	<servlet>
+		<servlet-name>settings_page</servlet-name>
+		<jsp-file>/settings.jsp</jsp-file>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>settings_page</servlet-name>
+		<url-pattern>/settings</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>home_page</servlet-name>
+		<jsp-file>/home.jsp</jsp-file>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>home_page</servlet-name>
+		<url-pattern>/home</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>signup_page</servlet-name>
+		<jsp-file>/signup.jsp</jsp-file>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>signup_page</servlet-name>
+		<url-pattern>/signup</url-pattern>
+	</servlet-mapping>
+
+
+	<servlet>
+		<servlet-name>researcher_page</servlet-name>
+		<jsp-file>/researcher.jsp</jsp-file>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>researcher_page</servlet-name>
+		<url-pattern>/researcher</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>watch_page</servlet-name>
+		<jsp-file>/watch.jsp</jsp-file>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>watch_page</servlet-name>
+		<url-pattern>/watch</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>experiments_page</servlet-name>
+		<jsp-file>/experiments.jsp</jsp-file>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>experiments_page</servlet-name>
+		<url-pattern>/experiments</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>thanks_page</servlet-name>
+		<jsp-file>/thanks.jsp</jsp-file>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>thanks_page</servlet-name>
+		<url-pattern>/thanks</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>error</servlet-name>
+		<jsp-file>/error.jsp</jsp-file>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>error</servlet-name>
+		<url-pattern>/error</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>api_page</servlet-name>
+		<jsp-file>/api.jsp</jsp-file>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>api_page</servlet-name>
+		<url-pattern>/api</url-pattern>
+	</servlet-mapping>
+
+
+
+	<!-- Default page to serve -->
+	<welcome-file-list>
+		<welcome-file>welcome</welcome-file>
+	</welcome-file-list>
+
+</web-app>
