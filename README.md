@@ -9,69 +9,73 @@ SocialSkip can be employed in real or experimental scenarios to generate user ac
 
 SocialSkip is also integrated with Google Drive, which allows the addition of a questionnaire next to the video. This feature has been useful in video experiments for learning, which include quiz questions next to the video.
 
-The main feature of SocialSkip is a video browser with custom player buttons that collects user interactions with the video to a data-base.
+The main feature of SocialSkip is a video browser with custom player buttons that collects user interactions with the video to a database.
 
 
 This web app integrates the following technologies and tools:
 
 * Google App Engine
+* Apache Maven
 * AppEngine Java SDK
 * Java Servlets and Java Server Pages
+* HTML5
+* CSS3
+* JavaScript
 * JQuery
 * JQuery Mobile
-* HTML5 Canvas
-* Youtube IFrame player API
+* Youtube IFrame Player API
 * Google Charts
 * Google Fusion Tables
 * Datastore API
 
-
-
+The instructions below provide step-by-step guidance to build your own copy of this web application.
 
 ### Requirements
 
 * Java JDK 1.7 - [Download](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html) and [Install](http://docs.oracle.com/javase/7/docs/webnotes/install/index.html)
-* Eclipse IDE for Java EE Developers - [Download](http://www.eclipse.org/downloads/)
-* Google Plugin for Eclipse - [Install](https://developers.google.com/eclipse/docs/download)
-* EGit - [Install](http://www.eclipse.org/egit/download/)
-* Google account - Don't have? [Create](https://accounts.google.com/)
+* Apache Maven - [Download](http://maven.apache.org/download.cgi) and [Install](http://maven.apache.org/install.html)
+* Google account - Don't you have? [Create](https://accounts.google.com/)
 
-### Configuration of the Eclipse
+### Creating Google App Engine Project
 
-Go to Eclipse folder and edit the eclipse.ini file. 
-Change the following lines with your path of JDK 1.7 and put this lines
+Google App Engine is a platform as a service (PaaS) cloud computing platform for developing and hosting web applications in Google-managed data centers.
+
+In order to run and test this application either locally or online, you must create a new project on Google App Engine. The following steps provide instructions for the creation of a new project, the activation of appropriate Google APIs and the configuration of credentials.
+
+1. Go to the [Google AppEngine](https://console.cloud.google.com/appengine).
+2. Click on `Create a project` and create a new project.
+3. Click on `Menu button` on the left side of screen and select `API Manager`.
+4. Search for the `Fusion Tables API` and enable it.
+3. Click on `Credentials` of the API Manager side menu.
+4. Click on `Create Credentials` -> `Service account key`.
+5. Create a new service account, select `P12` key type and click on `Create` to download it.
+6. Rename the downloaded P12 key file to `key.p12` and put it in `/src/main/resources` folder.
+7. Keep the `Service account ID`, it will be used below.
+
+Lastly, enter your *Project ID* in the *pom.xml* file.
+
+* pom.xml
 ```
--vm
-C:\Program Files\Java\jdk1.7.x_xx\bin\javaw.exe
+...
+<properties>
+    <app.id> Project ID </app.id>
+    <app.version>1</app.version>
+    <appengine.version>1.9.42</appengine.version>
+    ...
+...
 ```
-before `-vmargs` line.
-
-
-
-### Importing Source into Eclipse
-
-Open *Eclipse* and click on *File* --> *Import* -> *Git* > *Projects from Git*. Select *Clone URI* and click *Next*. In the *URI* field type the *URI* and click *Next* in the next windows and the last window click on *Finish*.
-
-From menu select *Project* -> *Properties* -> *Java Built Path*, open the *Libraries* tab and you should see the following items.
-```
-> gdata-core-1.0.jar - socialskip/war/WEB-INF/lib
-> gson-2.2.4.jar - socialskip/war/WEB-INF/lib
-> opencsv-2.3.jar - socialskip/war/WEB-INF/lib
-> recaptcha4j-0.0.7.jar - socialskip/war/WEB-INF/lib
-> App Engine SDK[App Engine – 1.x.x]
-> GWT SDK[GWT – 2.x.x]
-> JRE System Library[jdk1.7.x…]
-```
-If in the brackets of *JRE System Library[…]* is not *jdk1.7.xx*, remove this item and add a JDK 1.7 library.
-To do this, click on *Add Library* button, select *JRE System Library* and in the following screen select *jdk1.7.x*. If *jdk1.7.xx* is not your default JRE or not in the *Alternate JRE* list, then click on *Installed JREs*. In the window opened, click *Add*, select *Standard VM* and in *JRE home* type your JDK path, e.g *C:\Program Files\Java\jdk1.7.x_xx*.
 
 
 ### Creating Fusion Tables
 
-To create fusion tables, visit http://tables.googlelabs.com and sign in using your Google account.
-Click on *Create a Fusion Table* and in the new window click on *Create empty table*. The creation is very simple. You can add or modify columns by clicking *Edit* -> *Add column* or *Edit* -> *Change columns*, respectively. 
+Fusion Tables is a web service provided by Google for data management. Fusion tables can be used for gathering, visualising and sharing data tables. Fusion tables provides an API for managing tables and table data.
 
-You must be create the following tables.
+Fusion Tables is used by SocialSkip system as a web database for storing users' data such as video interactions.
+
+To create Fusion Tables, visit http://tables.googlelabs.com and sign in using your Google account.
+Click on `Create a Fusion Table` and in the new window click on `Create empty table`. The creation is very simple. You can add or modify columns by clicking `Edit` -> `Add column` or `Edit` -> `Change columns`, respectively.
+
+You must create the following tables.
 
 **Researchers**
 
@@ -91,10 +95,10 @@ Add the following rows in the Transactions table.
 
 |Id|	Transaction	|
 |-----------|-----------|
-|	1		|	Backward	|
-|2|   Forward	|
-|3|   Play	|
-|4|   Pause	|
+|1			|	Backward|
+|2			|   Forward	|
+|3			|   Play	|
+|4			|   Pause	|
 
 **Experiments**
 
@@ -131,82 +135,44 @@ Add the following rows in the Transactions table.
 
 
 The next table is a join table that represents a many-to-one relationship between *Interactions* and *Transactions* tables.
-Go to *Interactions* table  and select *File* -> *Merge*, in the next tab select the *Transactions* table.
-In the *This table* drop down list select *TransactionId* and select *Id* of the *Transactions* list and click *Next*.
+Go to *Interactions* table  and select `File` -> `Merge`, in the next tab select the *Transactions* table.
+In the `This table` drop down list select `TransactionId` and select `Id` of the `Transactions` list and click `Next`.
 In the new tab, select all and click on *Merge*.
 
+In each table, click on `File` -> `Share` and add a user with email the `Service account ID`.
 
-Copy the Ids from *Researchers*, *Interactions*, *Experiments*, *Merge of Interactions and Transactions* and *Access Tokens* tables and put them in the *src/FusionApi.java* file. To copy the IDs, open the table and select *File* -> *About this table*. See the comments in the file and the code below.
+Create a new XML file with name *config.xml* inside the `/src/main/resources` folder.
 
+Copy the Ids from *Researchers*, *Interactions*, *Experiments*, *Merge of Interactions and Transactions* and *Access Tokens* tables and used them to create the *config.xml* file as shown below. To copy the IDs, open the table and select `File` -> `About this table`.
+
+* config.xml
 ```
-public static final String RESEARCHERS = "**********";  // Researchers table ID
-public static final String EXPERIMENTS = "**********";  // Experiments table ID
-public static final String INTERACTIONS = "**********"; // Interactions table ID
-public static final String DOWNLOAD = "**********";  // Merge of Interactions and Transactions
-public static final String ACCESS_TOKENS = "**********";    // Access Tokens
-```
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <fusion_tables>
+        <researchers> Researchers table ID </researchers>
+        <experiments> Experiments table ID </experiments>
+        <interactions> Interactions table ID </interactions>
+        <access_tokens> Access Tokens table ID </access_tokens>
+        <merge_interactions_transactions> Merge of Interactions and Transactions ID </merge_interactions_transactions>
+    </fusion_tables>
 
-A few lines below in the same file, enter your gmail and your password.
-```
-private static final String email = "**************@gmail.com"; // Enter your gmail
-private static final String password = "**********"; // Enter password from your gmail
-```
-
-
-### Create a Google API key
-
-Go to https://code.google.com/apis/console. Click on *Create project* and in the page that was opened click *Enable an API*. In the next page, change the *Fusion Tables API* to *ON*. In the sequel click on *Credentials* and in *Public API access* click *Create new key* -> *Server key* -> *Create* and then copy the *API key* and paste it in the *src/FusionApi.java* file.
-```
-public static final String APIkey = "********************"; // API key
+    <service_account_email> Service account ID </service_account_email>
+</config>
 ```
 
+### Testing
 
-### Setting up reCAPTCHA
+You can run and test the application locally using the following Maven command:
 
-Visit [https://www.google.com/recaptcha](https://www.google.com/recaptcha). Click on *Get reCaptcha*, then *Sign up Now*. Type your domain in *Domain* and click *Create*. Go to *My account* and open your site.
-
-Copy the *Private key* and paste it in the src/socialskip/CheckCaptcha.java file.
 ```
-String privateKey = "************************";
+mvn appengine:devserver
 ```
-Copy the *Public Key* and paste in file war/home.jsp
-```
-........
-<script type="text/javascript"
-  src="http://www.google.com/recaptcha/api/challenge?k=***************************">
-</script>
-<noscript>
-  <iframe src="http://www.google.com/recaptcha/api/noscript?***************************"
-  .......
-</noscript>
-.......
-```
-
-
-### Creating App Engine Application
-
-Go to https://appengine.google.com, sign in with your google account and create an application. If this is your first time creating applications on App Engine, you may be asked to verify your account. When complete account verification, click *Create Application* and enter the address you want in *Application Identifier* and optionally enter *Application Title* and click on *Create Application* button.
-
-Enter your Application Identifier in the following files.
-
-* war/WEB-INF/appengine-web.xml
-```
-<?xml version="1.0" encoding="utf-8"?>
-  <appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
-  <application> Application_Identifier </application>
-  <version>1</version>
-  ......
-  </appengine-web-app>
-```
-* war/code/socialskip.js
-```
-var url = "http://Application_Identifier.appspot.com/researcher_videos?callback=?";
-var purl = "http://Application_Identifier.appspot.com/interactions";
-```
-
 
 ### Deploy to Google App Engine
 
-From the toolbar in Eclipse IDE click on *Google icon* -> *Deploy to App Engine* -> *Deploy*.
+You can deploy this application using the following Maven command:
 
-![Deploy](http://i58.tinypic.com/vqqpgj.jpg)
+```
+mvn appengine:update
+```
