@@ -516,7 +516,7 @@ SocialSkipVideoPlayer.prototype = {
         return html.join("");
     },
 
-	addInteraction : function (interaction_type, jump) {
+	addInteraction : function (interaction_type, video_time, jump) {
 		var today = new Date();
 
 		if (this._experiment._has_start) {
@@ -525,7 +525,7 @@ SocialSkipVideoPlayer.prototype = {
 					'expid': this._id,
 					'tester': cookie.tester_id,
 					'code': '3',
-					'vtime': Math.round(this._youtube_player.getCurrentTime()),
+					'vtime': video_time,
 					'ctime': today.getTime(),
 					'jump': 0
 				});
@@ -534,7 +534,7 @@ SocialSkipVideoPlayer.prototype = {
 					'expid': this._id,
 					'tester': cookie.tester_id,
 					'code': '4',
-					'vtime': Math.round(this._youtube_player.getCurrentTime()),
+					'vtime': video_time,
 					'ctime': today.getTime(),
 					'jump': 0
 				});
@@ -543,7 +543,7 @@ SocialSkipVideoPlayer.prototype = {
 					'expid': this._id,
 					'tester': cookie.tester_id,
 					'code': '2',
-					'vtime': Math.round(this._youtube_player.getCurrentTime()),
+					'vtime': video_time,
 					'ctime': today.getTime(),
 					'jump': jump
 				});
@@ -552,7 +552,7 @@ SocialSkipVideoPlayer.prototype = {
 					'expid': this._id,
 					'tester': cookie.tester_id,
 					'code': '1',
-					'vtime': Math.round(this._youtube_player.getCurrentTime()),
+					'vtime': video_time,
 					'ctime': today.getTime(),
 					'jump': jump
 				});
@@ -744,14 +744,14 @@ SocialSkipVideoPlayer.prototype = {
 				$("#socialskip-video-player-id-" + id + " .socialskip-video-player-big-play-btn").fadeOut(100);
 			}
 			if (yt_player.getPlayerState() != YT.PlayerState.PLAYING) {
-				_this.addInteraction("play", 0);
+				_this.addInteraction("play", Math.round(yt_player.getCurrentTime()), 0);
 				yt_player.playVideo();
 				if (_this._custom_state == "unstarted" || _this._custom_state == "ended") {
 					yt_player.seekTo(_this._time_trimmer.start, true);
 				}
 				_this.changeCustomState("playing");
 			} else {
-				_this.addInteraction("pause", 0);
+				_this.addInteraction("pause", Math.round(yt_player.getCurrentTime()), 0);
 				yt_player.pauseVideo();
 				_this.changeCustomState("paused");
 			}
@@ -933,15 +933,17 @@ SocialSkipVideoPlayer.prototype = {
 				var levelWidth = $("#socialskip-video-player-id-" + id + " .socialskip-video-player-slider-progress").width();
 				var sliderWidth = $("#socialskip-video-player-id-" + id + " .socialskip-video-player-slider").width();
 				var newPos = (levelWidth / sliderWidth) * _this.getCustomDuration();
-				yt_player.seekTo(parseInt(newPos) + _this._time_trimmer.start, true);
+				var seekto = parseInt(newPos) + _this._time_trimmer.start;
+
+				yt_player.seekTo(seekto, true);
 				if (_this._custom_state == "ended") {
 					_this.changeCustomState("playing");
 				}
 				var skip = parseInt(newPos - initialVideoTime);
 				if (skip > 0) {
-					_this.addInteraction("forward", skip);
+					_this.addInteraction("forward", seekto, skip);
 				} else {
-					_this.addInteraction("backward", -skip);
+					_this.addInteraction("backward", seekto, -skip);
 				}
 			} else {
 				$("#socialskip-video-player-id-" + id + " .socialskip-video-player-slider-msg").fadeIn(200);
@@ -970,7 +972,9 @@ SocialSkipVideoPlayer.prototype = {
 					var levelWidth = $("#socialskip-video-player-id-" + id + " .socialskip-video-player-slider-progress").width()
 	                var sliderWidth = $("#socialskip-video-player-id-" + id + " .socialskip-video-player-slider").width()
 	                var newPos = (levelWidth / sliderWidth) * (_this.getCustomDuration());
-					yt_player.seekTo(parseInt(newPos) + _this._time_trimmer.start, true);
+					var seekto = parseInt(newPos) + _this._time_trimmer.start;
+
+					yt_player.seekTo(seekto, true);
 
 					if (_this._custom_state == "ended") {
 						_this.changeCustomState("playing");
@@ -980,9 +984,9 @@ SocialSkipVideoPlayer.prototype = {
 						var skip = parseInt(newPos - initialVideoTime);
 
 						if (skip > 0) {
-							_this.addInteraction("forward", skip);
+							_this.addInteraction("forward", seekto, skip);
 						} else {
-							_this.addInteraction("backward", -skip);
+							_this.addInteraction("backward", seekto, -skip);
 						}
 					}
 	            });
