@@ -47,7 +47,7 @@ $(document).delegate("#signupPage", "pageinit", function () {
 
 				if (data == "ok") {
 					window.location.href = '/welcome';
-				} else if (data == "error") {
+				} else if (data == "error" || data == "error1") {
 					window.location.href = '#errorSignUpPage';
 				}
 
