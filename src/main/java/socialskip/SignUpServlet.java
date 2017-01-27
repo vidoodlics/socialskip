@@ -14,19 +14,19 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class SignUpServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, SocketTimeoutException {
-		
+
 		PrintWriter out = resp.getWriter();
 		String result = "error";;
-		
+
 		String name = req.getParameter("name").trim();
 		String mail = UserInfo.getMail();
-		
+
 		try {
 			// if user is not admin or user is already researcher
-			if (UserInfo.isAdministrator() || UserInfo.isResearcher(mail)) {
+			if (!UserInfo.isAdministrator() || UserInfo.isResearcher(mail)) {
 				result = "error1";
 			} else { // else insert admin in database
 				FusionApi tables = new FusionApi();
@@ -39,7 +39,7 @@ public class SignUpServlet extends HttpServlet {
 		} catch (Exception e) {
 			result = "error";
 		}
-		
+
 		out.print(result);
 	}
 
